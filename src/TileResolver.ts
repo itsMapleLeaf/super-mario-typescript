@@ -1,5 +1,5 @@
-import { Matrix } from './math'
 import { LevelTile } from './Level'
+import { Matrix } from './math'
 
 export type TileResolverMatch = {
   tile: LevelTile

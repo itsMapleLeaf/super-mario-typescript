@@ -1,7 +1,7 @@
-import { Keyboard } from './Keyboard'
 import { Entity } from './Entity'
-import { Jump } from './traits/Jump'
+import { Keyboard } from './Keyboard'
 import { Go } from './traits/Go'
+import { Jump } from './traits/Jump'
 
 export function setupKeyboard(mario: Entity) {
   const input = new Keyboard()

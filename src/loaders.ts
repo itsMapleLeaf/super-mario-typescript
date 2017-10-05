@@ -1,5 +1,5 @@
-import { Level } from './Level'
 import { createBackgroundLayer, createSpriteLayer } from './layers'
+import { Level } from './Level'
 import { loadBackgroundSprites } from './sprites'
 
 export type LevelSpec = {

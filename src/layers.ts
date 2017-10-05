@@ -1,6 +1,6 @@
-import { SpriteSheet } from './SpriteSheet'
 import { Entity } from './Entity'
 import { Level } from './Level'
+import { SpriteSheet } from './SpriteSheet'
 
 export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
   const buffer = document.createElement('canvas')

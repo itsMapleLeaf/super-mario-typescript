@@ -1,8 +1,8 @@
 import { Entity } from './Entity'
 import { loadMarioSprite } from './sprites'
-import { Jump } from './traits/Jump'
 import { SpriteSheet } from './SpriteSheet'
 import { Go } from './traits/Go'
+import { Jump } from './traits/Jump'
 
 export function createMario() {
   return loadMarioSprite().then((sprites: SpriteSheet) => {

@@ -1,6 +1,6 @@
-import { Matrix } from './math'
-import { LevelTile } from './Level'
 import { Entity } from './Entity'
+import { LevelTile } from './Level'
+import { Matrix } from './math'
 import { TileResolver } from './TileResolver'
 
 export class TileCollider {

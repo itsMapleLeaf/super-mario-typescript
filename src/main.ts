@@ -1,8 +1,8 @@
-import { loadLevel } from './loaders'
 import { createMario } from './entities'
-import { Timer } from './Timer'
-import { createCollisionLayer } from './layers'
 import { setupKeyboard } from './input'
+import { createCollisionLayer } from './layers'
+import { loadLevel } from './loaders'
+import { Timer } from './Timer'
 
 const canvas = document.getElementById('screen') as HTMLCanvasElement
 const context = canvas.getContext('2d')!
