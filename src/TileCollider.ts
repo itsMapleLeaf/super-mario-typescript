@@ -4,7 +4,7 @@ import { Matrix } from './math'
 import { TileResolver } from './TileResolver'
 
 export class TileCollider {
-  tiles = new TileResolver(this.tileMatrix)
+  tileResolver = new TileResolver(this.tileMatrix)
 
   constructor(public tileMatrix: Matrix<LevelTile>) {}
 
@@ -20,7 +20,7 @@ export class TileCollider {
       return
     }
 
-    const matches = this.tiles.searchByRange(x, x, pos.y, pos.y + size.y)
+    const matches = this.tileResolver.searchByRange(x, x, pos.y, pos.y + size.y)
 
     if (!matches) return
 
@@ -53,7 +53,7 @@ export class TileCollider {
       return
     }
 
-    const matches = this.tiles.searchByRange(pos.x, pos.x + size.x, y, y)
+    const matches = this.tileResolver.searchByRange(pos.x, pos.x + size.x, y, y)
 
     if (!matches) return
 
