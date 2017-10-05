@@ -1,19 +1,22 @@
 import { Entity } from './Entity'
 import { loadMarioSprite } from './sprites'
+import { SpriteSheet } from './SpriteSheet'
 import { Go } from './traits/Go'
 import { Jump } from './traits/Jump'
 
-export async function createMario() {
-  const sprites = await loadMarioSprite()
-
-  const mario = new Entity()
-  mario.size.set(14, 16)
-  mario.addTrait(new Jump())
-  mario.addTrait(new Go())
-
-  mario.draw = function drawMario(context: CanvasRenderingContext2D) {
-    sprites.draw('idle', context, this.pos.x, this.pos.y)
+class Mario extends Entity {
+  constructor(private sprites: SpriteSheet) {
+    super()
+    this.size.set(14, 16)
+    this.addTrait(new Jump())
+    this.addTrait(new Go())
   }
 
-  return mario
+  draw(context: CanvasRenderingContext2D) {
+    this.sprites.draw('idle', context, this.pos.x, this.pos.y)
+  }
+}
+
+export async function createMario() {
+  return new Mario(await loadMarioSprite())
 }
