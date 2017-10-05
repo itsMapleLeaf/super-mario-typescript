@@ -1,6 +1,7 @@
 import { createBackgroundLayer, createSpriteLayer } from './layers'
 import { Level } from './Level'
 import { loadBackgroundSprites } from './sprites'
+import { fetchJSON } from './util'
 
 export type LevelSpec = {
   backgrounds: BackgroundSpec[]
@@ -43,21 +44,21 @@ function createTiles(level: Level, backgrounds: BackgroundSpec[]) {
   })
 }
 
-export function loadLevel(name: string) {
-  return Promise.all([
-    fetch(`/public/levels/${name}.json`).then(res => res.json() as Promise<LevelSpec>),
+export async function loadLevel(name: string) {
+  const [levelSpec, backgroundSprites] = await Promise.all([
+    fetchJSON<LevelSpec>(`/public/levels/${name}.json`),
     loadBackgroundSprites(),
-  ]).then(([levelSpec, backgroundSprites]) => {
-    const level = new Level()
+  ])
 
-    createTiles(level, levelSpec.backgrounds)
+  const level = new Level()
 
-    const backgroundLayer = createBackgroundLayer(level, backgroundSprites)
-    level.comp.layers.push(backgroundLayer)
+  createTiles(level, levelSpec.backgrounds)
 
-    const spriteLayer = createSpriteLayer(level.entities)
-    level.comp.layers.push(spriteLayer)
+  const backgroundLayer = createBackgroundLayer(level, backgroundSprites)
+  level.comp.layers.push(backgroundLayer)
 
-    return level
-  })
+  const spriteLayer = createSpriteLayer(level.entities)
+  level.comp.layers.push(spriteLayer)
+
+  return level
 }
