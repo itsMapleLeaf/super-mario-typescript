@@ -6,7 +6,7 @@ export abstract class Trait {
   abstract update(entity: Entity, deltaTime: number): void
 }
 
-export class Entity {
+export abstract class Entity {
   pos = new Vec2(0, 0)
   vel = new Vec2(0, 0)
   size = new Vec2(0, 0)
@@ -27,5 +27,5 @@ export class Entity {
     })
   }
 
-  draw(context: CanvasRenderingContext2D) {}
+  abstract draw(context: CanvasRenderingContext2D): void
 }
