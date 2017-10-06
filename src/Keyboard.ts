@@ -13,7 +13,8 @@ export class Keyboard {
   }
 
   listenTo(target: EventTarget) {
-    ;['keydown', 'keyup'].forEach(eventName => {
+    const keyEvents = ['keydown', 'keyup']
+    keyEvents.forEach(eventName => {
       target.addEventListener(eventName, event => {
         this.handleEvent(event as KeyboardEvent)
       })
