@@ -5,7 +5,7 @@ export class SpriteSheet {
     public image: HTMLImageElement,
     public tileWidth: number,
     public tileHeight: number,
-  ) {}
+  ) { }
 
   define(name: string, x: number, y: number, width: number, height: number) {
     const buffer = document.createElement('canvas')
@@ -15,16 +15,8 @@ export class SpriteSheet {
 
     buffer.getContext('2d')!.drawImage(
       this.image,
-
-      x,
-      y,
-      width,
-      height,
-
-      0,
-      0,
-      width,
-      height,
+      x, y, width, height,
+      0, 0, width, height,
     )
 
     this.tiles.set(name, buffer)
@@ -48,12 +40,7 @@ export class SpriteSheet {
     context.drawImage(buffer, x, y)
   }
 
-  drawTile(
-    name: string,
-    context: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-  ) {
+  drawTile(name: string, context: CanvasRenderingContext2D, x: number, y: number) {
     this.draw(name, context, x * this.tileWidth, y * this.tileHeight)
   }
 }

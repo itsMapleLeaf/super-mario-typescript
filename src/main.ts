@@ -8,7 +8,10 @@ async function main() {
   const canvas = document.getElementById('screen') as HTMLCanvasElement
   const context = canvas.getContext('2d')!
 
-  const [mario, level] = await Promise.all([createMario(), loadLevel('1-1')])
+  const [mario, level] = await Promise.all([
+    createMario(),
+    loadLevel('1-1'),
+  ])
 
   // initialize mario
   mario.pos.set(64, 64)
