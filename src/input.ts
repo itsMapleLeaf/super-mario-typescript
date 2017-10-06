@@ -8,7 +8,7 @@ export function setupKeyboard(mario: Entity) {
   let leftMovement = 0
   let rightMovement = 0
 
-  input.addMapping('Space', pressed => {
+  input.addListener('Space', pressed => {
     const jump = mario.getTrait<Jump>('jump')!
     if (pressed) {
       jump.start()
@@ -17,13 +17,13 @@ export function setupKeyboard(mario: Entity) {
     }
   })
 
-  input.addMapping('ArrowRight', keyState => {
+  input.addListener('ArrowRight', keyState => {
     const go = mario.getTrait<Go>('go')!
     rightMovement = keyState
     go.dir = rightMovement + leftMovement
   })
 
-  input.addMapping('ArrowLeft', keyState => {
+  input.addListener('ArrowLeft', keyState => {
     const go = mario.getTrait<Go>('go')!
     leftMovement = -keyState
     go.dir = rightMovement + leftMovement
