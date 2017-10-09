@@ -8,14 +8,17 @@ export function setupKeyboard(mario: Entity) {
   let leftMovement = 0
   let rightMovement = 0
 
-  input.addListener('Space', pressed => {
+  function doJump(pressed: number) {
     const jump = mario.getTrait<Jump>('jump')!
     if (pressed) {
       jump.start()
     } else {
       jump.cancel()
     }
-  })
+  }
+
+  input.addListener('Space', doJump)
+  input.addListener('ArrowUp', doJump)
 
   input.addListener('ArrowRight', keyState => {
     const go = mario.getTrait<Go>('go')!
