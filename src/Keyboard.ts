@@ -27,7 +27,7 @@ export class Keyboard {
     if (listener) {
       this.keyStates.set(event.code, keyState)
       listener(keyState)
+      event.preventDefault()
     }
-    event.preventDefault()
   }
 }
