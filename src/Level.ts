@@ -5,6 +5,7 @@ import { TileCollider } from './TileCollider'
 
 export type LevelTile = {
   name: string
+  type: string
 }
 
 export class Level {

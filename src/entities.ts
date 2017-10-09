@@ -13,7 +13,7 @@ class Mario extends Entity {
   }
 
   draw(context: CanvasRenderingContext2D) {
-    this.sprites.draw('idle', context, this.pos.x, this.pos.y)
+    this.sprites.draw('idle', context, 0, 0)
   }
 }
 
