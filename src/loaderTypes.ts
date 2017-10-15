@@ -17,6 +17,7 @@ export type SpriteSheetSpec = {
   tileH: number
   tiles?: TileSpec[]
   frames?: FrameSpec[]
+  animations?: AnimationSpec[]
 }
 
 export type TileSpec = {
@@ -27,4 +28,10 @@ export type TileSpec = {
 export type FrameSpec = {
   name: string
   rect: [number, number, number, number]
+}
+
+export type AnimationSpec = {
+  name: string
+  frameLength: number
+  frames: string[]
 }

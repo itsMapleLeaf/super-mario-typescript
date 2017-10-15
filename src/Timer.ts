@@ -16,6 +16,7 @@ export class Timer {
 
   private updateProxy = (time: number) => {
     this.accumulatedTime += (time - this.lastTime) / 1000
+    this.accumulatedTime = Math.min(this.accumulatedTime, 1)
 
     while (this.accumulatedTime > this.deltaTime) {
       this.update(this.deltaTime)

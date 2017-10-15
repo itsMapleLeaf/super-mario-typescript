@@ -2,7 +2,6 @@ import { Camera } from './Camera'
 import { setupMouseControl } from './debug'
 import { createMario } from './entities'
 import { setupKeyboard } from './input'
-import { createCameraLayer, createCollisionLayer } from './layers'
 import { loadLevel } from './loaders'
 import { Timer } from './Timer'
 
@@ -16,8 +15,6 @@ async function main() {
 
   // initialize mario
   mario.pos.set(64, 64)
-
-  level.comp.layers.push(createCollisionLayer(level), createCameraLayer(camera))
 
   level.entities.add(mario)
 

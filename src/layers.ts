@@ -17,17 +17,25 @@ export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
   let endIndex: number
 
   function drawTiles(drawFrom: number, drawTo: number) {
-    if (drawFrom === startIndex && drawTo === endIndex) return
+    // if (drawFrom === startIndex && drawTo === endIndex) return
     startIndex = drawFrom
     endIndex = drawTo
-
-    console.log('redrawing')
 
     for (let x = startIndex; x <= endIndex; x++) {
       const col = tiles.grid[x]
       if (col) {
         col.forEach((tile, y) => {
-          sprites.drawTile(tile.name, context, x - startIndex, y)
+          if (sprites.animations.has(tile.name)) {
+            sprites.drawAnimation(
+              tile.name,
+              context,
+              x - startIndex,
+              y,
+              level.totalTime,
+            )
+          } else {
+            sprites.drawTile(tile.name, context, x - startIndex, y)
+          }
         })
       }
     }
@@ -42,11 +50,7 @@ export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
     const drawTo = drawFrom + drawWidth
     drawTiles(drawFrom, drawTo)
 
-    context.drawImage(
-      buffer,
-      -camera.pos.x % 16,
-      -camera.pos.y
-    )
+    context.drawImage(buffer, -camera.pos.x % 16, -camera.pos.y)
   }
 }
 
@@ -120,13 +124,16 @@ export function createCollisionLayer(level: Level) {
 }
 
 export function createCameraLayer(cameraToDraw: Camera) {
-  return function drawCameraRect(context: CanvasRenderingContext2D, fromCamera: Camera) {
+  return function drawCameraRect(
+    context: CanvasRenderingContext2D,
+    fromCamera: Camera,
+  ) {
     context.strokeStyle = 'purple'
     context.strokeRect(
       cameraToDraw.pos.x - fromCamera.pos.x,
       cameraToDraw.pos.y - fromCamera.pos.y,
       cameraToDraw.size.x,
-      cameraToDraw.size.y
+      cameraToDraw.size.y,
     )
   }
 }

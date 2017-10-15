@@ -50,6 +50,7 @@
       "sprite": "chance",
       "type": "ground",
       "ranges": [
+        [2, 2],
         [23, 9],
         [28, 9],
         [30, 9],

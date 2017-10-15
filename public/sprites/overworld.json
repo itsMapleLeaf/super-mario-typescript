@@ -3,11 +3,23 @@
   "imageURL": "/public/images/tiles.png",
   "tileW": 16,
   "tileH": 16,
+
   "tiles": [
     { "name": "ground", "index": [0, 0] },
     { "name": "sky", "index": [3, 23] },
     { "name": "chocolate", "index": [0, 1] },
     { "name": "bricks", "index": [1, 0] },
-    { "name": "chance", "index": [24, 0] }
+    { "name": "chance", "index": [24, 0] },
+    { "name": "chance-1", "index": [24, 0] },
+    { "name": "chance-2", "index": [25, 0] },
+    { "name": "chance-3", "index": [26, 0] }
+  ],
+
+  "animations": [
+    {
+      "name": "chance",
+      "frameLength": 0.15,
+      "frames": ["chance-1", "chance-1", "chance-2", "chance-3", "chance-2"]
+    }
   ]
 }

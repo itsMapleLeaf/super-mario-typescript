@@ -1,25 +1,34 @@
+import { Animation } from './animation'
+
 export class SpriteSheet {
-  tiles = new Map<string, HTMLCanvasElement>()
+  tiles = new Map<string, HTMLCanvasElement[]>()
+  animations = new Map<string, Animation>()
 
   constructor(
     public image: HTMLImageElement,
     public tileWidth: number,
     public tileHeight: number,
-  ) { }
+  ) {}
 
   define(name: string, x: number, y: number, width: number, height: number) {
-    const buffer = document.createElement('canvas')
+    const buffers = [false, true].map(flipped => {
+      const buffer = document.createElement('canvas')
+      buffer.width = width
+      buffer.height = height
 
-    buffer.width = width
-    buffer.height = height
+      const context = buffer.getContext('2d')!
 
-    buffer.getContext('2d')!.drawImage(
-      this.image,
-      x, y, width, height,
-      0, 0, width, height,
-    )
+      if (flipped) {
+        context.scale(-1, 1)
+        context.translate(-width, 0)
+      }
 
-    this.tiles.set(name, buffer)
+      context.drawImage(this.image, x, y, width, height, 0, 0, width, height)
+
+      return buffer
+    })
+
+    this.tiles.set(name, buffers)
   }
 
   defineTile(name: string, x: number, y: number) {
@@ -32,15 +41,44 @@ export class SpriteSheet {
     )
   }
 
-  draw(name: string, context: CanvasRenderingContext2D, x: number, y: number) {
-    const buffer = this.tiles.get(name)
-    if (!buffer) {
-      throw new Error(`SpriteSheet.draw(): Sprite "${name}" not found`)
-    }
-    context.drawImage(buffer, x, y)
+  defineAnimation(name: string, animation: Animation) {
+    this.animations.set(name, animation)
   }
 
-  drawTile(name: string, context: CanvasRenderingContext2D, x: number, y: number) {
+  draw(
+    name: string,
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    flip = false,
+  ) {
+    const buffers = this.tiles.get(name)
+    if (!buffers) {
+      throw new Error(`SpriteSheet.draw(): Sprite "${name}" not found`)
+    }
+    context.drawImage(buffers[flip ? 1 : 0], x, y)
+  }
+
+  drawTile(
+    name: string,
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+  ) {
     this.draw(name, context, x * this.tileWidth, y * this.tileHeight)
+  }
+
+  drawAnimation(
+    name: string,
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    distance: number,
+  ) {
+    const animation = this.animations.get(name)
+    if (!animation) {
+      throw new Error(`Animation not found: ${name}`)
+    }
+    this.drawTile(animation(distance), context, x, y)
   }
 }

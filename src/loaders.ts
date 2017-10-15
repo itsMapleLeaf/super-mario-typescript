@@ -1,3 +1,4 @@
+import { createAnimation } from './animation'
 import { createBackgroundLayer, createSpriteLayer } from './layers'
 import { Level } from './Level'
 import { BackgroundSpec, LevelSpec, SpriteSheetSpec } from './loaderTypes'
@@ -35,7 +36,10 @@ function createTiles(level: Level, backgrounds: BackgroundSpec[]) {
     const yEnd = yStart + yLength
     for (let x = xStart; x < xEnd; x++) {
       for (let y = yStart; y < yEnd; y++) {
-        level.tiles.set(x, y, { name: background.sprite, type: background.type })
+        level.tiles.set(x, y, {
+          name: background.sprite,
+          type: background.type,
+        })
       }
     }
   }
@@ -63,10 +67,26 @@ export async function loadSpriteSheet(name: string) {
 
   const sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH)
 
-  sheetSpec.tiles.forEach(tileSpec => {
-    const [x, y] = tileSpec.index
-    sprites.defineTile(tileSpec.name, x, y)
-  })
+  if (sheetSpec.tiles) {
+    sheetSpec.tiles.forEach(tileSpec => {
+      const [x, y] = tileSpec.index
+      sprites.defineTile(tileSpec.name, x, y)
+    })
+  }
+
+  if (sheetSpec.frames) {
+    sheetSpec.frames.forEach(frameSpec => {
+      const [x, y, width, height] = frameSpec.rect
+      sprites.define(frameSpec.name, x, y, width, height)
+    })
+  }
+
+  if (sheetSpec.animations) {
+    sheetSpec.animations.forEach(animSpec => {
+      const animation = createAnimation(animSpec.frames, animSpec.frameLength)
+      sprites.defineAnimation(animSpec.name, animation)
+    })
+  }
 
   return sprites
 }

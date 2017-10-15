@@ -15,6 +15,7 @@ export class Level {
   tileCollider = new TileCollider(this.tiles)
 
   gravity = 2000
+  totalTime = 0
 
   update(deltaTime: number) {
     this.entities.forEach(entity => {
@@ -28,5 +29,7 @@ export class Level {
 
       entity.vel.y += this.gravity * deltaTime
     })
+
+    this.totalTime += deltaTime
   }
 }
