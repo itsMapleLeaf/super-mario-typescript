@@ -1,31 +1,7 @@
 import { createBackgroundLayer, createSpriteLayer } from './layers'
 import { Level } from './Level'
+import { BackgroundSpec, LevelSpec, SpriteSheetSpec } from './loaderTypes'
 import { SpriteSheet } from './SpriteSheet'
-
-export type LevelSpec = {
-  backgrounds: BackgroundSpec[]
-  spriteSheet: string
-}
-
-export type BackgroundSpec = {
-  sprite: string
-  type: string
-  ranges: BackgroundRange[]
-}
-
-export type BackgroundRange = number[]
-
-export type SpriteSheetSpec = {
-  imageURL: string
-  tileW: number
-  tileH: number
-  tiles: TileSpec[]
-}
-
-export type TileSpec = {
-  name: string
-  index: [number, number]
-}
 
 export function loadImage(url: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
