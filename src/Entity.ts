@@ -17,8 +17,10 @@ export abstract class Entity {
     this.traits.push(trait)
   }
 
-  getTrait<T extends Trait>(name: string): T | undefined {
-    return this.traits.find(trait => trait.NAME === name) as T
+  getTrait<T extends Trait>(name: string): T {
+    const trait = this.traits.find(trait => trait.NAME === name)
+    if (!trait) throw new Error('Trait not found:' + name)
+    return trait as T
   }
 
   update(deltaTime: number) {
