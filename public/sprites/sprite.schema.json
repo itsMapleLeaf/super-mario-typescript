@@ -1,0 +1,22 @@
+{
+  "title": "Spritesheet schema",
+  "type": "object",
+  "properties": {
+    "imageURL": {
+      "type": "string"
+    },
+    "frames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "rect": {
+            "type": "array",
+            "items": { "type": "number" }
+          }
+        }
+      }
+    }
+  }
+}

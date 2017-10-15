@@ -1,4 +1,5 @@
 {
+  "$schema": "./level.schema.json",
   "spriteSheet": "overworld",
   "backgrounds": [
     {

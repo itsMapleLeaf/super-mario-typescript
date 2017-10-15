@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "spriteSheet": { "type": "string" },
+    "backgrounds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sprite": { "type": "string" },
+          "type": { "type": "string" },
+          "ranges": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
