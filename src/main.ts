@@ -10,6 +10,10 @@ async function main() {
   const [mario, level] = await Promise.all([createMario(), loadLevel('1-1')])
   const camera = new Camera()
 
+  context.imageSmoothingEnabled = false
+  context.mozImageSmoothingEnabled = false
+  context.webkitImageSmoothingEnabled = false
+
   mario.pos.set(64, 64)
   level.entities.add(mario)
 
@@ -29,7 +33,10 @@ async function main() {
 
     checkGamepadInput()
 
+    context.save()
+    context.scale(3, 3)
     level.comp.draw(context, camera)
+    context.restore()
 
     drawControls(context)
   }
@@ -58,13 +65,13 @@ function drawControls(context: CanvasRenderingContext2D) {
 
   context.save()
 
-  context.font = '8pt Roboto, sans-serif'
+  context.font = '20px Roboto, sans-serif'
   context.textAlign = 'left'
   context.textBaseline = 'top'
   context.fillStyle = 'white'
 
   lines.forEach((line, index) => {
-    const offset = index * 10
+    const offset = index * 24
     context.fillText(line, 0, 0 + offset)
   })
 
