@@ -15,18 +15,19 @@ export function setupKeyboard(mario: Entity) {
     }
   }
 
-  input.addListener('Space', doJump)
-  input.addListener('ArrowUp', doJump)
-
-  input.addListener('ArrowRight', keyState => {
+  function moveRight(keyState: number) {
     const go = mario.getTrait<Go>('go')!
     go.dir += keyState === 1 ? 1 : -1
-  })
+  }
 
-  input.addListener('ArrowLeft', keyState => {
+  function moveLeft(keyState: number) {
     const go = mario.getTrait<Go>('go')!
     go.dir += keyState === 1 ? -1 : 1
-  })
+  }
+
+  input.addListener('KeyP', doJump)
+  input.addListener('KeyD', moveRight)
+  input.addListener('KeyA', moveLeft)
 
   return input
 }
