@@ -16,7 +16,7 @@ async function main() {
   const input = setupKeyboard(mario)
   input.listenTo(window)
 
-  setupGamepad(mario)
+  const checkGamepadInput = setupGamepad(mario)
 
   const timer = new Timer()
 
@@ -27,10 +27,48 @@ async function main() {
       camera.pos.x = mario.pos.x - 100
     }
 
+    checkGamepadInput()
+
     level.comp.draw(context, camera)
+
+    drawControls(context)
   }
 
   timer.start()
+}
+
+// TODO: consider turning into a text layer, maybe
+function drawControls(context: CanvasRenderingContext2D) {
+  const text = `
+    Controls:
+
+      Keyboard:
+        A - Move Left
+        D - Move Right
+        P - Jump
+        O - Run
+
+      Gamepad:
+        Left Stick - Move Left/Right
+        A/B - Jump
+        X/Y - Run
+  `
+
+  const lines = text.split(/[\r\n]/)
+
+  context.save()
+
+  context.font = '8pt Roboto, sans-serif'
+  context.textAlign = 'left'
+  context.textBaseline = 'top'
+  context.fillStyle = 'white'
+
+  lines.forEach((line, index) => {
+    const offset = index * 10
+    context.fillText(line, 0, 0 + offset)
+  })
+
+  context.restore()
 }
 
 main().catch(console.error)

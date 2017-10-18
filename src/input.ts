@@ -33,7 +33,7 @@ export function setupKeyboard(mario: Mario) {
 }
 
 export function setupGamepad(mario: Mario) {
-  function checkLoop() {
+  return function checkGamepadInput() {
     const gamepad = navigator.getGamepads()[0]
 
     if (gamepad) {
@@ -55,8 +55,5 @@ export function setupGamepad(mario: Mario) {
       mario.go.dir = movementAxis
       mario.turbo(running)
     }
-
-    requestAnimationFrame(checkLoop)
   }
-  checkLoop()
 }
