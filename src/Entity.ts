@@ -1,9 +1,15 @@
 import { Vec2 } from './math'
 
+export enum Side {
+  top,
+  bottom,
+}
+
 export abstract class Trait {
   constructor(public NAME: string) {}
 
   abstract update(entity: Entity, deltaTime: number): void
+  obstruct(entity: Entity, side: Side) {}
 }
 
 export abstract class Entity {
@@ -30,4 +36,10 @@ export abstract class Entity {
   }
 
   abstract draw(context: CanvasRenderingContext2D): void
+
+  obstruct(side: Side) {
+    this.traits.forEach(trait => {
+      trait.obstruct(this, side)
+    })
+  }
 }

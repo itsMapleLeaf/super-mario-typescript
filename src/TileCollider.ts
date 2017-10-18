@@ -1,4 +1,4 @@
-import { Entity } from './Entity'
+import { Entity, Side } from './Entity'
 import { LevelTile } from './Level'
 import { Matrix } from './math'
 import { TileResolver } from './TileResolver'
@@ -64,11 +64,15 @@ export class TileCollider {
         if (pos.y + size.y > match.y1) {
           pos.y = match.y1 - size.y
           vel.y = 0
+
+          entity.obstruct(Side.bottom)
         }
       } else if (vel.y < 0) {
         if (pos.y < match.y2) {
           pos.y = match.y2
           vel.y = 0
+
+          entity.obstruct(Side.top)
         }
       }
     })

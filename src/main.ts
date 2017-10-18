@@ -1,5 +1,4 @@
 import { Camera } from './Camera'
-import { setupMouseControl } from './debug'
 import { createMario } from './entities'
 import { setupKeyboard } from './input'
 import { loadLevel } from './loaders'
@@ -21,13 +20,16 @@ async function main() {
   const input = setupKeyboard(mario)
   input.listenTo(window)
 
-  setupMouseControl(canvas, mario, camera)
-
   // start game loop
   const timer = new Timer()
 
   timer.update = function update(deltaTime) {
     level.update(deltaTime)
+
+    if (mario.pos.x > 100) {
+      camera.pos.x = mario.pos.x - 100
+    }
+
     level.comp.draw(context, camera)
   }
 

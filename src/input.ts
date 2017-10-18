@@ -1,33 +1,33 @@
-import { Entity } from './Entity'
+import { Mario } from './entities/Mario'
 import { Keyboard } from './Keyboard'
-import { Go } from './traits/Go'
-import { Jump } from './traits/Jump'
 
-export function setupKeyboard(mario: Entity) {
+export function setupKeyboard(mario: Mario) {
   const input = new Keyboard()
 
   function doJump(pressed: number) {
-    const jump = mario.getTrait<Jump>('jump')!
     if (pressed) {
-      jump.start()
+      mario.jump.start()
     } else {
-      jump.cancel()
+      mario.jump.cancel()
     }
   }
 
   function moveRight(keyState: number) {
-    const go = mario.getTrait<Go>('go')!
-    go.dir += keyState === 1 ? 1 : -1
+    mario.go.dir += keyState === 1 ? 1 : -1
   }
 
   function moveLeft(keyState: number) {
-    const go = mario.getTrait<Go>('go')!
-    go.dir += keyState === 1 ? -1 : 1
+    mario.go.dir += keyState === 1 ? -1 : 1
   }
 
-  input.addListener('KeyP', doJump)
+  function run(keyState: number) {
+    mario.turbo(keyState === 1)
+  }
+
   input.addListener('KeyD', moveRight)
   input.addListener('KeyA', moveLeft)
+  input.addListener('KeyP', doJump)
+  input.addListener('KeyO', run)
 
   return input
 }

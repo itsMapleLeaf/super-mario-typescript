@@ -14,7 +14,7 @@ export class Level {
   tiles = new Matrix<LevelTile>()
   tileCollider = new TileCollider(this.tiles)
 
-  gravity = 2000
+  gravity = 1500
   totalTime = 0
 
   update(deltaTime: number) {
