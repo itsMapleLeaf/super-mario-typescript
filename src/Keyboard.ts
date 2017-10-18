@@ -22,6 +22,8 @@ export class Keyboard {
   }
 
   private handleEvent(event: KeyboardEvent) {
+    if (event.repeat) return
+
     const listener = this.keyListeners.get(event.code)
     const keyState = event.type === 'keydown' ? 1 : 0
     if (listener) {
