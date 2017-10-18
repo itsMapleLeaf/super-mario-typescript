@@ -1,6 +1,6 @@
 {
   "$schema": "./sprite.schema.json",
-  "imageURL": "/public/images/tiles.png",
+  "imageURL": "public/images/tiles.png",
   "tileW": 16,
   "tileH": 16,
 
