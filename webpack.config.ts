@@ -37,7 +37,7 @@ const config: webpack.Configuration = {
     hints: false,
   },
   plugins: [
-    new HTMLPlugin({ template: resolve(sourcePath, 'index.html') }),
+    new HTMLPlugin({ template: resolve(root, 'index.html') }),
     new CopyPlugin([{ from: 'public', to: 'public' }]),
   ],
   devtool: '#source-map',
