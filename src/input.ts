@@ -5,8 +5,6 @@ import { Jump } from './traits/Jump'
 
 export function setupKeyboard(mario: Entity) {
   const input = new Keyboard()
-  let leftMovement = 0
-  let rightMovement = 0
 
   function doJump(pressed: number) {
     const jump = mario.getTrait<Jump>('jump')!
@@ -22,14 +20,12 @@ export function setupKeyboard(mario: Entity) {
 
   input.addListener('ArrowRight', keyState => {
     const go = mario.getTrait<Go>('go')!
-    rightMovement = keyState
-    go.dir = rightMovement + leftMovement
+    go.dir += keyState === 1 ? 1 : -1
   })
 
   input.addListener('ArrowLeft', keyState => {
     const go = mario.getTrait<Go>('go')!
-    leftMovement = -keyState
-    go.dir = rightMovement + leftMovement
+    go.dir += keyState === 1 ? -1 : 1
   })
 
   return input
