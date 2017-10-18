@@ -1,7 +1,7 @@
 {
-  "name": "my-awesome-typescript-project",
+  "name": "super-mario-typescript",
   "version": "0.1.0",
-  "description": "it does a thing, probably",
+  "description": "'Code Super Mario in JS' but with TypeScript",
   "author": "just nobody",
   "license": "MIT",
   "scripts": {
