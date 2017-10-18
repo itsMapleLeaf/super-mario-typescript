@@ -61,7 +61,7 @@ function createTiles(level: Level, backgrounds: BackgroundSpec[]) {
 }
 
 export async function loadSpriteSheet(name: string) {
-  const url = `/public/sprites/${name}.json`
+  const url = `public/sprites/${name}.json`
   const sheetSpec = await loadJSON<SpriteSheetSpec>(url)
   const image = await loadImage(sheetSpec.imageURL)
 
@@ -92,7 +92,7 @@ export async function loadSpriteSheet(name: string) {
 }
 
 export async function loadLevel(name: string) {
-  const levelSpec = await loadJSON<LevelSpec>(`/public/levels/${name}.json`)
+  const levelSpec = await loadJSON<LevelSpec>(`public/levels/${name}.json`)
   const backgroundSprites = await loadSpriteSheet(levelSpec.spriteSheet)
 
   const level = new Level()
