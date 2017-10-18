@@ -31,3 +31,32 @@ export function setupKeyboard(mario: Mario) {
 
   return input
 }
+
+export function setupGamepad(mario: Mario) {
+  function checkLoop() {
+    const gamepad = navigator.getGamepads()[0]
+
+    if (gamepad) {
+      let movementAxis = gamepad.axes[0]
+      const jumping = gamepad.buttons[0].pressed || gamepad.buttons[1].pressed
+      const running = gamepad.buttons[2].pressed || gamepad.buttons[3].pressed
+
+      // factor in deadzone
+      if (Math.abs(movementAxis) < 0.5) {
+        movementAxis = 0
+      }
+
+      if (jumping) {
+        mario.jump.start()
+      } else {
+        mario.jump.cancel()
+      }
+
+      mario.go.dir = movementAxis
+      mario.turbo(running)
+    }
+
+    requestAnimationFrame(checkLoop)
+  }
+  checkLoop()
+}
