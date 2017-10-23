@@ -1,16 +1,15 @@
-import { LevelTile } from './Level'
 import { Matrix } from './math'
 
-export type TileResolverMatch = {
-  tile: LevelTile
+export type TileResolverMatch<TileType> = {
+  tile: TileType
   x1: number
   x2: number
   y1: number
   y2: number
 }
 
-export class TileResolver {
-  constructor(public matrix: Matrix<LevelTile>, public tileSize = 16) {}
+export class TileResolver<TileType> {
+  constructor(public matrix: Matrix<TileType>, public tileSize = 16) {}
 
   toIndex(pos: number) {
     return Math.floor(pos / this.tileSize)
@@ -29,7 +28,7 @@ export class TileResolver {
     return range
   }
 
-  getByIndex(indexX: number, indexY: number): TileResolverMatch | void {
+  getByIndex(indexX: number, indexY: number): TileResolverMatch<TileType> | void {
     const tile = this.matrix.get(indexX, indexY)
     if (tile) {
       const x1 = indexX * this.tileSize
@@ -45,7 +44,7 @@ export class TileResolver {
   }
 
   searchByRange(x1: number, x2: number, y1: number, y2: number) {
-    const matches = [] as TileResolverMatch[]
+    const matches = [] as TileResolverMatch<TileType>[]
 
     this.toIndexRange(x1, x2).forEach(indexX => {
       this.toIndexRange(y1, y2).forEach(indexY => {

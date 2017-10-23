@@ -1,5 +1,4 @@
 {
-  "$schema": "./sprite.schema.json",
   "imageURL": "public/images/characters.gif",
   "frames": [
     {

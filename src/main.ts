@@ -1,7 +1,7 @@
 import { Camera } from './Camera'
 import { createMario } from './entities'
 import { setupGamepad, setupKeyboard } from './input'
-import { loadLevel } from './loaders'
+import { loadLevel } from './loaders/level'
 import { Timer } from './Timer'
 
 async function main() {
@@ -38,14 +38,14 @@ async function main() {
     level.comp.draw(context, camera)
     context.restore()
 
-    drawControls(context)
+    // drawControls(context)
   }
 
   timer.start()
 }
 
 // TODO: consider turning into a text layer, maybe
-function drawControls(context: CanvasRenderingContext2D) {
+/* function drawControls(context: CanvasRenderingContext2D) {
   const text = `
     Controls:
 
@@ -77,5 +77,6 @@ function drawControls(context: CanvasRenderingContext2D) {
 
   context.restore()
 }
+*/
 
 main().catch(console.error)

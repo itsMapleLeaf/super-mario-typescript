@@ -1,12 +1,12 @@
 import { Entity, Side } from './Entity'
-import { LevelTile } from './Level'
+import { CollisionTile } from './Level'
 import { Matrix } from './math'
 import { TileResolver } from './TileResolver'
 
 export class TileCollider {
   tileResolver = new TileResolver(this.tileMatrix)
 
-  constructor(public tileMatrix: Matrix<LevelTile>) {}
+  constructor(public tileMatrix: Matrix<CollisionTile>) {}
 
   checkX(entity: Entity) {
     const { pos, size, vel } = entity

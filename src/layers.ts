@@ -1,11 +1,20 @@
 import { Camera } from './Camera'
 import { Entity } from './Entity'
 import { Level } from './Level'
+import { Matrix } from './math'
 import { SpriteSheet } from './SpriteSheet'
+import { TileResolver } from './TileResolver'
 
-export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
-  const { tiles } = level
-  const { tileResolver } = level.tileCollider
+export type BackgroundTile = {
+  name: string
+}
+
+export function createBackgroundLayer(
+  level: Level,
+  tiles: Matrix<BackgroundTile>,
+  sprites: SpriteSheet,
+) {
+  const tileResolver = new TileResolver(tiles)
 
   const buffer = document.createElement('canvas')
   buffer.width = 256 + 16
@@ -13,26 +22,15 @@ export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
 
   const context = buffer.getContext('2d')!
 
-  let startIndex: number
-  let endIndex: number
-
-  function drawTiles(drawFrom: number, drawTo: number) {
-    // if (drawFrom === startIndex && drawTo === endIndex) return
-    startIndex = drawFrom
-    endIndex = drawTo
+  function drawTiles(startIndex: number, endIndex: number) {
+    context.clearRect(0, 0, buffer.width, buffer.height)
 
     for (let x = startIndex; x <= endIndex; x++) {
       const col = tiles.grid[x]
       if (col) {
         col.forEach((tile, y) => {
           if (sprites.animations.has(tile.name)) {
-            sprites.drawAnimation(
-              tile.name,
-              context,
-              x - startIndex,
-              y,
-              level.totalTime,
-            )
+            sprites.drawAnimation(tile.name, context, x - startIndex, y, level.totalTime)
           } else {
             sprites.drawTile(tile.name, context, x - startIndex, y)
           }
@@ -41,10 +39,7 @@ export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
     }
   }
 
-  return function drawBackgroundLayer(
-    context: CanvasRenderingContext2D,
-    camera: Camera,
-  ) {
+  return function drawBackgroundLayer(context: CanvasRenderingContext2D, camera: Camera) {
     const drawWidth = tileResolver.toIndex(camera.size.x)
     const drawFrom = tileResolver.toIndex(camera.pos.x)
     const drawTo = drawFrom + drawWidth
@@ -54,31 +49,20 @@ export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
   }
 }
 
-export function createSpriteLayer(
-  entities: Set<Entity>,
-  width = 64,
-  height = 64,
-) {
+export function createSpriteLayer(entities: Set<Entity>, width = 64, height = 64) {
   const spriteBuffer = document.createElement('canvas')
   spriteBuffer.width = width
   spriteBuffer.height = height
 
   const spriteBufferContext = spriteBuffer.getContext('2d')!
 
-  return function drawSpriteLayer(
-    context: CanvasRenderingContext2D,
-    camera: Camera,
-  ) {
+  return function drawSpriteLayer(context: CanvasRenderingContext2D, camera: Camera) {
     entities.forEach(entity => {
       spriteBufferContext.clearRect(0, 0, width, height)
 
       entity.draw(spriteBufferContext)
 
-      context.drawImage(
-        spriteBuffer,
-        entity.pos.x - camera.pos.x,
-        entity.pos.y - camera.pos.y,
-      )
+      context.drawImage(spriteBuffer, entity.pos.x - camera.pos.x, entity.pos.y - camera.pos.y)
     })
   }
 }
@@ -95,10 +79,7 @@ export function createCollisionLayer(level: Level) {
     return getByIndexOriginal.call(tileResolver, x, y)
   }
 
-  return function drawCollision(
-    context: CanvasRenderingContext2D,
-    camera: Camera,
-  ) {
+  return function drawCollision(context: CanvasRenderingContext2D, camera: Camera) {
     context.strokeStyle = 'blue'
 
     resolvedTiles.forEach(({ x, y }) => {
@@ -124,10 +105,7 @@ export function createCollisionLayer(level: Level) {
 }
 
 export function createCameraLayer(cameraToDraw: Camera) {
-  return function drawCameraRect(
-    context: CanvasRenderingContext2D,
-    fromCamera: Camera,
-  ) {
+  return function drawCameraRect(context: CanvasRenderingContext2D, fromCamera: Camera) {
     context.strokeStyle = 'purple'
     context.strokeRect(
       cameraToDraw.pos.x - fromCamera.pos.x,

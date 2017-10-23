@@ -1,16 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "strict": true,
     "noUnusedLocals": true
   },
-  "include": [
-    "src/**/*",
-    "webpack.config.ts"
-  ]
+  "include": ["src/**/*", "webpack.config.ts"]
 }

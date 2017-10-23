@@ -1,15 +1,27 @@
 export type LevelSpec = {
-  backgrounds: BackgroundSpec[]
   spriteSheet: string
+  patterns: LevelSpecPatterns
+  layers: LevelSpecLayer[]
 }
 
-export type BackgroundSpec = {
-  sprite: string
+export type LevelSpecLayer = {
+  tiles: LevelSpecTile[]
+}
+
+export type LevelSpecPatterns = {
+  [name: string]: {
+    tiles: LevelSpecTile[]
+  }
+}
+
+export type LevelSpecTile = {
   type: string
-  ranges: BackgroundRange[]
+  name?: string
+  pattern?: string
+  ranges: TileRange[]
 }
 
-export type BackgroundRange = number[]
+export type TileRange = number[]
 
 export type SpriteSheetSpec = {
   imageURL: string
