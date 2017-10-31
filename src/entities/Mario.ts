@@ -1,5 +1,6 @@
-import { createAnimation } from '../animation'
+import { Animation } from '../animation'
 import { Entity } from '../Entity'
+import { loadSpriteSheet } from '../loaders'
 import { SpriteSheet } from '../SpriteSheet'
 import { Go } from '../traits/Go'
 import { Jump } from '../traits/Jump'
@@ -11,16 +12,17 @@ export class Mario extends Entity {
   jump = new Jump()
   go = new Go()
 
-  runAnimation = createAnimation(['run-1', 'run-2', 'run-3'], 8)
-
-  constructor(private sprites: SpriteSheet) {
+  constructor(private sprites: SpriteSheet, private runAnimation: Animation) {
     super()
+
     this.size.set(14, 16)
 
     this.addTrait(this.jump)
     this.addTrait(this.go)
 
     this.go.dragFactor = SLOW_DRAG
+
+    this.setTurboState(false)
   }
 
   resolveAnimationFrame() {
@@ -29,10 +31,7 @@ export class Mario extends Entity {
     }
 
     if (this.go.distance > 0) {
-      if (
-        (this.vel.x > 0 && this.go.dir < 0) ||
-        (this.vel.x < 0 && this.go.dir > 0)
-      ) {
+      if ((this.vel.x > 0 && this.go.dir < 0) || (this.vel.x < 0 && this.go.dir > 0)) {
         return 'brake'
       }
 
@@ -42,16 +41,19 @@ export class Mario extends Entity {
   }
 
   draw(context: CanvasRenderingContext2D) {
-    this.sprites.draw(
-      this.resolveAnimationFrame(),
-      context,
-      0,
-      0,
-      this.go.heading < 0,
-    )
+    this.sprites.draw(this.resolveAnimationFrame(), context, 0, 0, this.go.heading < 0)
   }
 
-  turbo(turboState: boolean) {
+  setTurboState(turboState: boolean) {
     this.go.dragFactor = turboState ? FAST_DRAG : SLOW_DRAG
+  }
+}
+
+export async function loadMario() {
+  const marioSprites = await loadSpriteSheet('mario')
+  const runAnimation = marioSprites.getAnimation('run')
+
+  return function createMario() {
+    return new Mario(marioSprites, runAnimation)
   }
 }

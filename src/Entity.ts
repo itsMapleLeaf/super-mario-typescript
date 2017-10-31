@@ -1,8 +1,11 @@
 import { Vec2 } from './math'
+import { BoundingBox } from './BoundingBox'
 
 export enum Side {
   top,
   bottom,
+  left,
+  right,
 }
 
 export abstract class Trait {
@@ -13,14 +16,17 @@ export abstract class Trait {
 }
 
 export abstract class Entity {
-  pos = new Vec2(0, 0)
-  vel = new Vec2(0, 0)
-  size = new Vec2(0, 0)
-
+  pos = new Vec2()
+  vel = new Vec2()
+  size = new Vec2()
+  offset = new Vec2()
+  bounds = new BoundingBox(this.pos, this.size, this.offset)
   traits = [] as Trait[]
+  lifetime = 0
 
   addTrait(trait: Trait) {
     this.traits.push(trait)
+    return trait
   }
 
   getTrait<T extends Trait>(name: string): T {
@@ -33,6 +39,7 @@ export abstract class Entity {
     this.traits.forEach(trait => {
       trait.update(this, deltaTime)
     })
+    this.lifetime += deltaTime
   }
 
   abstract draw(context: CanvasRenderingContext2D): void

@@ -1,21 +1,31 @@
 import { Camera } from './Camera'
-import { createMario } from './entities'
+import { loadEntities } from './entities'
 import { setupGamepad, setupKeyboard } from './input'
 import { loadLevel } from './loaders/level'
 import { Timer } from './Timer'
 
 async function main() {
+  const [entities, level] = await Promise.all([loadEntities(), loadLevel('1-1')])
+
   const canvas = document.getElementById('screen') as HTMLCanvasElement
   const context = canvas.getContext('2d')!
-  const [mario, level] = await Promise.all([createMario(), loadLevel('1-1')])
-  const camera = new Camera()
-
   context.imageSmoothingEnabled = false
   context.mozImageSmoothingEnabled = false
   context.webkitImageSmoothingEnabled = false
 
+  const camera = new Camera()
+
+  const mario = entities.createMario()
   mario.pos.set(64, 64)
   level.entities.add(mario)
+
+  const goomba = entities.createGoomba()
+  goomba.pos.x = 220
+  level.entities.add(goomba)
+
+  const koopa = entities.createKoopa()
+  koopa.pos.x = 180
+  level.entities.add(koopa)
 
   const input = setupKeyboard(mario)
   input.listenTo(window)

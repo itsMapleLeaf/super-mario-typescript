@@ -93,8 +93,8 @@ export function createCollisionLayer(level: Level) {
 
     level.entities.forEach(entity => {
       context.strokeRect(
-        entity.pos.x - camera.pos.x,
-        entity.pos.y - camera.pos.y,
+        entity.bounds.left - camera.pos.x,
+        entity.bounds.top - camera.pos.y,
         entity.size.x,
         entity.size.y,
       )

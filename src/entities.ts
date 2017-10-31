@@ -1,6 +1,12 @@
-import { Mario } from './entities/Mario'
-import { loadSpriteSheet } from './loaders'
+import { loadGoomba } from './entities/Goomba'
+import { loadKoopa } from './entities/Koopa'
+import { loadMario } from './entities/Mario'
 
-export async function createMario() {
-  return new Mario(await loadSpriteSheet('mario'))
+export async function loadEntities() {
+  const [createMario, createGoomba, createKoopa] = await Promise.all([
+    loadMario(),
+    loadGoomba(),
+    loadKoopa(),
+  ])
+  return { createMario, createGoomba, createKoopa }
 }

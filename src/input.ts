@@ -21,7 +21,7 @@ export function setupKeyboard(mario: Mario) {
   }
 
   function run(keyState: number) {
-    mario.turbo(keyState === 1)
+    mario.setTurboState(keyState === 1)
   }
 
   input.addListener('KeyD', moveRight)
@@ -53,7 +53,7 @@ export function setupGamepad(mario: Mario) {
       }
 
       mario.go.dir = movementAxis
-      mario.turbo(running)
+      mario.setTurboState(running)
     }
   }
 }
