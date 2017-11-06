@@ -1,32 +1,52 @@
+import { EntityFactory } from '../entities'
 import { createBackgroundLayer, createSpriteLayer } from '../layers'
 import { BackgroundTile, CollisionTile, Level } from '../Level'
 import { loadJSON, loadSpriteSheet } from '../loaders'
 import { Matrix } from '../math'
+import { SpriteSheet } from '../SpriteSheet'
 import { LevelSpec, LevelSpecPatterns, LevelSpecTile, TileRange } from './types'
 
-export async function loadLevel(name: string) {
-  const levelSpec = await loadJSON<LevelSpec>(`public/levels/${name}.json`)
-  const backgroundSprites = await loadSpriteSheet(levelSpec.spriteSheet)
-
-  const level = new Level()
-
+function setupCollision(levelSpec: LevelSpec, level: Level) {
   const mergedTiles = levelSpec.layers.reduce<LevelSpecTile[]>((mergedTiles, layerSpec) => {
     return mergedTiles.concat(layerSpec.tiles)
   }, [])
 
   const collisionGrid = createCollisionGrid(mergedTiles, levelSpec.patterns)
   level.setCollisionGrid(collisionGrid)
+}
 
+function setupBackground(levelSpec: LevelSpec, level: Level, backgroundSprites: SpriteSheet) {
   for (const layer of levelSpec.layers) {
     const backgroundGrid = createBackgroundGrid(layer.tiles, levelSpec.patterns)
     const backgroundLayer = createBackgroundLayer(level, backgroundGrid, backgroundSprites)
     level.comp.layers.push(backgroundLayer)
   }
+}
+
+function setupEntities(levelSpec: LevelSpec, level: Level, entityFactory: EntityFactory) {
+  levelSpec.entities.forEach(({ name, position: [x, y] }) => {
+    const createEntity = entityFactory[name]
+    const entity = createEntity()
+    entity.pos.set(x, y)
+    level.entities.add(entity)
+  })
 
   const spriteLayer = createSpriteLayer(level.entities)
   level.comp.layers.push(spriteLayer)
+}
 
-  return level
+export function createLevelLoader(entityFactory: EntityFactory) {
+  return async function loadLevel(name: string) {
+    const levelSpec = await loadJSON<LevelSpec>(`public/levels/${name}.json`)
+    const backgroundSprites = await loadSpriteSheet(levelSpec.spriteSheet)
+    const level = new Level()
+
+    setupCollision(levelSpec, level)
+    setupBackground(levelSpec, level, backgroundSprites)
+    setupEntities(levelSpec, level, entityFactory)
+
+    return level
+  }
 }
 
 function createCollisionGrid(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
@@ -76,22 +96,22 @@ function expandRange(range: TileRange) {
 
 function* expandRanges(ranges: TileRange[]) {
   for (const range of ranges) {
-    for (const item of expandRange(range)) {
-      yield item
-    }
+    yield* expandRange(range)
   }
 }
 
-type TileCreatorResult = {
-  tile: LevelSpecTile
-  x: number
-  y: number
-}
+function* expandTiles(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
+  type TileCreatorResult = {
+    tile: LevelSpecTile
+    x: number
+    y: number
+  }
 
-function expandTiles(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
-  const expandedTiles = [] as TileCreatorResult[]
-
-  function walkTiles(tiles: LevelSpecTile[], offsetX: number, offsetY: number) {
+  function* walkTiles(
+    tiles: LevelSpecTile[],
+    offsetX: number,
+    offsetY: number,
+  ): IterableIterator<TileCreatorResult> {
     for (const tile of tiles) {
       for (const { x, y } of expandRanges(tile.ranges)) {
         const derivedX = x + offsetX
@@ -102,13 +122,13 @@ function expandTiles(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
             throw new Error(`pattern ${tile.pattern} not found`)
           }
           const { tiles } = patterns[tile.pattern]
-          walkTiles(tiles, derivedX, derivedY)
+          yield* walkTiles(tiles, derivedX, derivedY)
         } else if (tile.name) {
-          expandedTiles.push({
+          yield {
             tile,
             x: derivedX,
             y: derivedY,
-          })
+          }
         } else {
           throw new Error(`Tile does not have a name or a pattern: ${JSON.stringify(tile)}`)
         }
@@ -116,7 +136,5 @@ function expandTiles(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
     }
   }
 
-  walkTiles(tiles, 0, 0)
-
-  return expandedTiles
+  yield* walkTiles(tiles, 0, 0)
 }

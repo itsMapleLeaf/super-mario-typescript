@@ -2,10 +2,16 @@ export type LevelSpec = {
   spriteSheet: string
   patterns: LevelSpecPatterns
   layers: LevelSpecLayer[]
+  entities: LevelSpecEntity[]
 }
 
 export type LevelSpecLayer = {
   tiles: LevelSpecTile[]
+}
+
+export type LevelSpecEntity = {
+  name: string
+  position: [number, number]
 }
 
 export type LevelSpecPatterns = {
