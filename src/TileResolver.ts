@@ -38,18 +38,14 @@ export class TileResolver<TileType> {
     return this.getByIndex(this.toIndex(posX), this.toIndex(posY))
   }
 
-  searchByRange(x1: number, x2: number, y1: number, y2: number) {
-    const matches = [] as TileResolverMatch<TileType>[]
-
+  *searchByRange(x1: number, x2: number, y1: number, y2: number) {
     for (const indexX of this.toIndexRange(x1, x2)) {
       for (const indexY of this.toIndexRange(y1, y2)) {
         const match = this.getByIndex(indexX, indexY)
         if (match) {
-          matches.push(match)
+          yield match
         }
       }
     }
-
-    return matches
   }
 }

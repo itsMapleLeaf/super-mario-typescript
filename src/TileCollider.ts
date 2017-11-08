@@ -20,7 +20,7 @@ export class TileCollider {
 
     const matches = this.tileResolver.searchByRange(x, x, entity.bounds.top, entity.bounds.bottom)
 
-    matches.forEach(match => {
+    for (const match of matches) {
       if (match.tile.type !== 'ground') {
         return
       }
@@ -40,7 +40,7 @@ export class TileCollider {
           entity.obstruct(Side.left)
         }
       }
-    })
+    }
   }
 
   checkY(entity: Entity) {
@@ -55,7 +55,7 @@ export class TileCollider {
 
     const matches = this.tileResolver.searchByRange(entity.bounds.left, entity.bounds.right, y, y)
 
-    matches.forEach(match => {
+    for (const match of matches) {
       if (match.tile.type !== 'ground') {
         return
       }
@@ -75,6 +75,6 @@ export class TileCollider {
           entity.obstruct(Side.top)
         }
       }
-    })
+    }
   }
 }
