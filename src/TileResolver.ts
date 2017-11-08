@@ -15,17 +15,12 @@ export class TileResolver<TileType> {
     return Math.floor(pos / this.tileSize)
   }
 
-  toIndexRange(pos1: number, pos2: number) {
+  *toIndexRange(pos1: number, pos2: number) {
     const pMax = Math.ceil(pos2 / this.tileSize) * this.tileSize
-    const range = [] as number[]
-    let pos = pos1
 
-    do {
-      range.push(this.toIndex(pos))
-      pos += this.tileSize
-    } while (pos < pMax)
-
-    return range
+    for (let pos = pos1; pos < pMax; pos += this.tileSize) {
+      yield this.toIndex(pos)
+    }
   }
 
   getByIndex(indexX: number, indexY: number): TileResolverMatch<TileType> | void {
@@ -46,14 +41,14 @@ export class TileResolver<TileType> {
   searchByRange(x1: number, x2: number, y1: number, y2: number) {
     const matches = [] as TileResolverMatch<TileType>[]
 
-    this.toIndexRange(x1, x2).forEach(indexX => {
-      this.toIndexRange(y1, y2).forEach(indexY => {
+    for (const indexX of this.toIndexRange(x1, x2)) {
+      for (const indexY of this.toIndexRange(y1, y2)) {
         const match = this.getByIndex(indexX, indexY)
         if (match) {
           matches.push(match)
         }
-      })
-    })
+      }
+    }
 
     return matches
   }
