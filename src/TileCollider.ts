@@ -22,7 +22,7 @@ export class TileCollider {
 
     for (const match of matches) {
       if (match.tile.type !== 'ground') {
-        return
+        continue
       }
 
       if (entity.vel.x > 0) {
@@ -57,7 +57,7 @@ export class TileCollider {
 
     for (const match of matches) {
       if (match.tile.type !== 'ground') {
-        return
+        continue
       }
 
       if (entity.vel.y > 0) {
