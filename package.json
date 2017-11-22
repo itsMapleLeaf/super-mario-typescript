@@ -5,7 +5,7 @@
   "author": "just nobody",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --inline --hot --progress --open",
+    "start": "webpack-dev-server --inline --hot",
     "build": "webpack -p"
   },
   "devDependencies": {
