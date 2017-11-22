@@ -1,5 +1,6 @@
 import { Compositor } from './Compositor'
 import { Entity } from './Entity'
+import { EntityCollider } from './EntityCollider'
 import { Matrix } from './math'
 import { TileCollider } from './TileCollider'
 
@@ -15,6 +16,7 @@ export class Level {
   comp = new Compositor()
   entities = new Set<Entity>()
   tileCollider: TileCollider
+  entityCollider = new EntityCollider(this.entities)
 
   gravity = 1500
   totalTime = 0
@@ -25,15 +27,20 @@ export class Level {
 
   update(deltaTime: number) {
     this.entities.forEach(entity => {
-      entity.update(deltaTime)
+      entity.update(deltaTime, this)
 
       entity.pos.x += entity.vel.x * deltaTime
-      this.tileCollider.checkX(entity)
+
+      if (entity.canCollide) this.tileCollider.checkX(entity)
 
       entity.pos.y += entity.vel.y * deltaTime
-      this.tileCollider.checkY(entity)
+      if (entity.canCollide) this.tileCollider.checkY(entity)
 
       entity.vel.y += this.gravity * deltaTime
+    })
+
+    this.entities.forEach(entity => {
+      if (entity.canCollide) this.entityCollider.check(entity)
     })
 
     this.totalTime += deltaTime

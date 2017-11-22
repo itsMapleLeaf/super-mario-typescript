@@ -1,9 +1,20 @@
 import { Camera } from './Camera'
 import { loadEntities } from './entities'
 import { Mario } from './entities/Mario'
+import { Entity } from './Entity'
 import { setupGamepad, setupKeyboard } from './input'
 import { createLevelLoader } from './loaders/level'
 import { Timer } from './Timer'
+import { PlayerController } from './traits/PlayerController'
+
+function createPlayerEnv(playerEntity: Entity) {
+  const playerEnv = new Entity()
+  const playerControl = new PlayerController()
+  playerControl.checkpoint.set(64, 64)
+  playerControl.setPlayer(playerEntity)
+  playerEnv.addTrait(playerControl)
+  return playerEnv
+}
 
 async function main(canvas: HTMLCanvasElement) {
   const entityFactory = await loadEntities()
@@ -21,13 +32,8 @@ async function main(canvas: HTMLCanvasElement) {
   mario.pos.set(64, 64)
   level.entities.add(mario)
 
-  const goomba = entityFactory.goomba()
-  goomba.pos.x = 220
-  level.entities.add(goomba)
-
-  const koopa = entityFactory.koopa()
-  koopa.pos.x = 180
-  level.entities.add(koopa)
+  const playerEnv = createPlayerEnv(mario)
+  level.entities.add(playerEnv)
 
   const input = setupKeyboard(mario)
   input.listenTo(window)
@@ -39,9 +45,7 @@ async function main(canvas: HTMLCanvasElement) {
   timer.update = function update(deltaTime) {
     level.update(deltaTime)
 
-    if (mario.pos.x > 100) {
-      camera.pos.x = mario.pos.x - 100
-    }
+    camera.pos.x = Math.max(0, mario.pos.x - 100)
 
     checkGamepadInput()
 

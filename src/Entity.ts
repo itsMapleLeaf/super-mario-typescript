@@ -1,5 +1,6 @@
-import { Vec2 } from './math'
 import { BoundingBox } from './BoundingBox'
+import { Level } from './Level'
+import { Vec2 } from './math'
 
 export enum Side {
   top,
@@ -10,12 +11,16 @@ export enum Side {
 
 export abstract class Trait {
   constructor(public NAME: string) {}
-
-  abstract update(entity: Entity, deltaTime: number): void
+  update(entity: Entity, deltaTime: number, level: Level) {}
   obstruct(entity: Entity, side: Side) {}
+  collides(us: Entity, them: Entity) {}
 }
 
-export abstract class Entity {
+interface TraitConstructor<T extends Trait> {
+  new (): T
+}
+
+export class Entity {
   pos = new Vec2()
   vel = new Vec2()
   size = new Vec2()
@@ -23,30 +28,36 @@ export abstract class Entity {
   bounds = new BoundingBox(this.pos, this.size, this.offset)
   traits = [] as Trait[]
   lifetime = 0
+  canCollide = true
 
-  addTrait(trait: Trait) {
+  addTrait<T extends Trait>(trait: T): T {
     this.traits.push(trait)
     return trait
   }
 
-  getTrait<T extends Trait>(name: string): T {
-    const trait = this.traits.find(trait => trait.NAME === name)
-    if (!trait) throw new Error('Trait not found:' + name)
-    return trait as T
+  getTrait<T extends Trait>(TraitClass: TraitConstructor<T>): T | null {
+    const trait = this.traits.find(trait => trait instanceof TraitClass)
+    return trait as T | null
   }
 
-  update(deltaTime: number) {
+  update(deltaTime: number, level: Level) {
     this.traits.forEach(trait => {
-      trait.update(this, deltaTime)
+      trait.update(this, deltaTime, level)
     })
     this.lifetime += deltaTime
   }
 
-  abstract draw(context: CanvasRenderingContext2D): void
+  draw(context: CanvasRenderingContext2D) {}
 
   obstruct(side: Side) {
     this.traits.forEach(trait => {
       trait.obstruct(this, side)
+    })
+  }
+
+  collides(candidate: Entity) {
+    this.traits.forEach(trait => {
+      trait.collides(this, candidate)
     })
   }
 }

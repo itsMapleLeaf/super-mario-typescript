@@ -1,28 +1,151 @@
-import { Animation } from '../animation'
-import { Entity } from '../Entity'
+import { Entity, Trait } from '../Entity'
 import { loadSpriteSheet } from '../loaders'
 import { SpriteSheet } from '../SpriteSheet'
-import { PendulumWalk } from '../traits/PendulumWalk'
+import { Killable } from '../traits/Killable'
+import { PendulumMove } from '../traits/PendulumMove'
+import { Stomper } from '../traits/Stomper'
+
+enum KoopaState {
+  walking,
+  hiding,
+  panic,
+}
+
+class KoopaBehavior extends Trait {
+  state = KoopaState.walking
+  hideTime = 0
+  hideDuration = 5
+  panicSpeed = 300
+  walkSpeed: number
+
+  constructor() {
+    super('behavior')
+  }
+
+  collides(us: Entity, them: Entity) {
+    if (us.getTrait(Killable)!.dead) {
+      return
+    }
+
+    const stomper = them.getTrait(Stomper)
+    if (stomper) {
+      if (them.vel.y > us.vel.y) {
+        this.handleStomp(us, them)
+      } else {
+        this.handleNudge(us, them)
+      }
+    }
+  }
+
+  handleStomp(us: Entity, them: Entity) {
+    if (this.state === KoopaState.walking) {
+      this.hide(us)
+    } else if (this.state === KoopaState.hiding) {
+      us.getTrait(Killable)!.kill()
+      us.vel.set(100, -200)
+      us.canCollide = false
+    } else if (this.state === KoopaState.panic) {
+      this.hide(us)
+    }
+  }
+
+  handleNudge(us: Entity, them: Entity) {
+    const kill = () => {
+      const killable = them.getTrait(Killable)
+      if (killable) {
+        killable.kill()
+      }
+    }
+
+    if (this.state === KoopaState.walking) {
+      kill()
+    } else if (this.state === KoopaState.hiding) {
+      this.panic(us, them)
+    } else if (this.state === KoopaState.panic) {
+      const travelDir = Math.sign(us.vel.x)
+      const impactDir = Math.sign(us.pos.x - them.pos.x)
+      if (travelDir !== 0 && travelDir !== impactDir) {
+        kill()
+      }
+    }
+  }
+
+  hide(us: Entity) {
+    const walk = us.getTrait(PendulumMove)!
+
+    us.vel.x = 0
+    walk.enabled = false
+
+    if (!this.walkSpeed) {
+      this.walkSpeed = walk.speed
+    }
+
+    this.state = KoopaState.hiding
+    this.hideTime = 0
+  }
+
+  unhide(us: Entity) {
+    const walk = us.getTrait(PendulumMove)!
+    walk.enabled = true
+    walk.speed = this.walkSpeed
+    this.state = KoopaState.walking
+  }
+
+  panic(us: Entity, them: Entity) {
+    us.getTrait(PendulumMove)!.speed = this.panicSpeed * Math.sign(them.vel.x)
+    us.getTrait(PendulumMove)!.enabled = true
+    this.state = KoopaState.panic
+  }
+
+  update(us: Entity, deltaTime: number) {
+    if (this.state === KoopaState.hiding) {
+      this.hideTime += deltaTime
+
+      if (this.hideTime > this.hideDuration) {
+        this.unhide(us)
+      }
+    }
+  }
+}
 
 export class Koopa extends Entity {
-  walk = this.addTrait(new PendulumWalk())
+  walk = this.addTrait(new PendulumMove())
+  behavior = this.addTrait(new KoopaBehavior())
+  killable = this.addTrait(new Killable())
 
-  constructor(private sprites: SpriteSheet, private walkAnim: Animation) {
+  walkAnim = this.sprites.getAnimation('walk')
+  wakeAnim = this.sprites.getAnimation('wake')
+
+  constructor(private sprites: SpriteSheet) {
     super()
     this.size.set(16, 16)
     this.offset.set(0, 8)
   }
 
   draw(context: CanvasRenderingContext2D) {
-    this.sprites.draw(this.walkAnim(this.lifetime), context, 0, 0, this.vel.x < 0)
+    this.sprites.draw(this.routeAnim(), context, 0, 0, this.vel.x < 0)
+  }
+
+  private routeAnim() {
+    if (this.behavior.state === KoopaState.hiding) {
+      if (this.behavior.hideTime > 3) {
+        return this.wakeAnim(this.behavior.hideTime)
+      }
+      return 'hiding'
+    }
+
+    if (this.behavior.state === KoopaState.panic) {
+      return 'hiding'
+    }
+
+    return this.walkAnim(this.lifetime)
   }
 }
 
 export async function loadKoopa() {
   const sprites = await loadSpriteSheet('koopa')
-  const walkAnim = sprites.getAnimation('walk')
 
   return function createKoopa() {
-    return new Koopa(sprites, walkAnim)
+    return new Koopa(sprites)
   }
 }

@@ -19,7 +19,7 @@ export class Go extends Trait {
     if (this.dir !== 0) {
       entity.vel.x += this.acceleration * this.dir * deltaTime
 
-      const jump = entity.getTrait<Jump>('jump')
+      const jump = entity.getTrait(Jump)
       if (jump) {
         if (jump.falling === false) {
           this.heading = this.dir
