@@ -3,6 +3,8 @@ import { loadSpriteSheet } from '../loaders'
 import { SpriteSheet } from '../SpriteSheet'
 import { Killable } from '../traits/Killable'
 import { PendulumMove } from '../traits/PendulumMove'
+import { Physics } from '../traits/Physics'
+import { Solid } from '../traits/Solid'
 import { Stomper } from '../traits/Stomper'
 
 enum KoopaState {
@@ -43,7 +45,7 @@ class KoopaBehavior extends Trait {
     } else if (this.state === KoopaState.hiding) {
       us.getTrait(Killable)!.kill()
       us.vel.set(100, -200)
-      us.canCollide = false
+      us.getTrait(Solid)!.obstructs = false
     } else if (this.state === KoopaState.panic) {
       this.hide(us)
     }
@@ -112,6 +114,8 @@ export class Koopa extends Entity {
   walk = this.addTrait(new PendulumMove())
   behavior = this.addTrait(new KoopaBehavior())
   killable = this.addTrait(new Killable())
+  solid = this.addTrait(new Solid())
+  physics = this.addTrait(new Physics())
 
   walkAnim = this.sprites.getAnimation('walk')
   wakeAnim = this.sprites.getAnimation('wake')

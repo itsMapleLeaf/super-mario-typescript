@@ -1,6 +1,7 @@
 import { BoundingBox } from './BoundingBox'
 import { Level } from './Level'
 import { Vec2 } from './math'
+import { TileResolverMatch } from './TileResolver'
 
 export enum Side {
   top,
@@ -10,10 +11,21 @@ export enum Side {
 }
 
 export abstract class Trait {
+  tasks = [] as Array<() => void>
+
   constructor(public NAME: string) {}
   update(entity: Entity, deltaTime: number, level: Level) {}
-  obstruct(entity: Entity, side: Side) {}
+  obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {}
   collides(us: Entity, them: Entity) {}
+
+  queue(task: () => void) {
+    this.tasks.push(task)
+  }
+
+  finalize() {
+    this.tasks.forEach(task => task())
+    this.tasks.splice(0)
+  }
 }
 
 interface TraitConstructor<T extends Trait> {
@@ -28,16 +40,19 @@ export class Entity {
   bounds = new BoundingBox(this.pos, this.size, this.offset)
   traits = [] as Trait[]
   lifetime = 0
-  canCollide = true
 
   addTrait<T extends Trait>(trait: T): T {
     this.traits.push(trait)
     return trait
   }
 
-  getTrait<T extends Trait>(TraitClass: TraitConstructor<T>): T | null {
-    const trait = this.traits.find(trait => trait instanceof TraitClass)
-    return trait as T | null
+  getTrait<T extends Trait>(TraitClass: TraitConstructor<T>): T | void {
+    for (const trait of this.traits) {
+      if (trait instanceof TraitClass) {
+        return trait as T
+      }
+    }
+    return undefined
   }
 
   update(deltaTime: number, level: Level) {
@@ -49,9 +64,15 @@ export class Entity {
 
   draw(context: CanvasRenderingContext2D) {}
 
-  obstruct(side: Side) {
+  finalize() {
     this.traits.forEach(trait => {
-      trait.obstruct(this, side)
+      trait.finalize()
+    })
+  }
+
+  obstruct(side: Side, match: TileResolverMatch<any>) {
+    this.traits.forEach(trait => {
+      trait.obstruct(this, side, match)
     })
   }
 

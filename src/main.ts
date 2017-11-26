@@ -22,9 +22,6 @@ async function main(canvas: HTMLCanvasElement) {
   const level = await loadLevel('1-1')
 
   const context = canvas.getContext('2d')!
-  context.imageSmoothingEnabled = false
-  context.mozImageSmoothingEnabled = false
-  context.webkitImageSmoothingEnabled = false
 
   const camera = new Camera()
 
@@ -49,10 +46,7 @@ async function main(canvas: HTMLCanvasElement) {
 
     checkGamepadInput()
 
-    context.save()
-    context.scale(3, 3)
     level.comp.draw(context, camera)
-    context.restore()
   }
 
   timer.start()

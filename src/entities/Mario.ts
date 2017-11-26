@@ -5,7 +5,9 @@ import { SpriteSheet } from '../SpriteSheet'
 import { Go } from '../traits/Go'
 import { Jump } from '../traits/Jump'
 import { Killable } from '../traits/Killable'
+import { Solid } from '../traits/Solid'
 import { Stomper } from '../traits/Stomper'
+import { Physics } from '../traits/Physics'
 
 const FAST_DRAG = 1 / 5000
 const SLOW_DRAG = 1 / 1000
@@ -15,6 +17,8 @@ export class Mario extends Entity {
   go = this.addTrait(new Go())
   stomper = this.addTrait(new Stomper())
   killable = this.addTrait(new Killable())
+  solid = this.addTrait(new Solid())
+  physics = this.addTrait(new Physics())
 
   constructor(private sprites: SpriteSheet, private runAnimation: Animation) {
     super()
