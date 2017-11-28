@@ -1,5 +1,6 @@
 import { EntityFactory } from '../entities'
-import { createBackgroundLayer, createSpriteLayer } from '../layers'
+import { createBackgroundLayer } from '../layers/background'
+import { createSpriteLayer } from '../layers/sprites'
 import { BackgroundTile, CollisionTile, Level } from '../Level'
 import { loadJSON, loadSpriteSheet } from '../loaders'
 import { Matrix } from '../math'

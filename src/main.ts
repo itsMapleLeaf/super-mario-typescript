@@ -3,6 +3,9 @@ import { loadEntities } from './entities'
 import { Mario } from './entities/Mario'
 import { Entity } from './Entity'
 import { setupGamepad, setupKeyboard } from './input'
+import { createCollisionLayer } from './layers/collision'
+import { createDashboardLayer } from './layers/dashboard'
+import { loadFont } from './loaders/font'
 import { createLevelLoader } from './loaders/level'
 import { Timer } from './Timer'
 import { PlayerController } from './traits/PlayerController'
@@ -17,7 +20,7 @@ function createPlayerEnv(playerEntity: Entity) {
 }
 
 async function main(canvas: HTMLCanvasElement) {
-  const entityFactory = await loadEntities()
+  const [entityFactory, font] = await Promise.all([loadEntities(), loadFont()])
   const loadLevel = createLevelLoader(entityFactory)
   const level = await loadLevel('1-1')
 
@@ -38,6 +41,9 @@ async function main(canvas: HTMLCanvasElement) {
   const checkGamepadInput = setupGamepad(mario)
 
   const timer = new Timer()
+
+  level.comp.layers.push(createCollisionLayer(level))
+  level.comp.layers.push(createDashboardLayer(font, playerEnv))
 
   timer.update = function update(deltaTime) {
     level.update(deltaTime)

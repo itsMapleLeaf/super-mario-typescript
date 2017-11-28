@@ -8,6 +8,8 @@ export class Stomper extends Trait {
     super('stomper')
   }
 
+  onStomp = (us: Entity, them: Entity) => {}
+
   bounce(us: Entity, them: Entity) {
     us.bounds.bottom = them.bounds.top
     us.vel.y = -this.bounceSpeed
@@ -21,6 +23,7 @@ export class Stomper extends Trait {
 
     if (us.vel.y > them.vel.y) {
       this.bounce(us, them)
+      this.onStomp(us, them)
     }
   }
 
