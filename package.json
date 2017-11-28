@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --inline --hot",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^4.0.1",
