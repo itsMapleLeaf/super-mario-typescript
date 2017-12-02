@@ -20,10 +20,6 @@ class KoopaBehavior extends Trait {
   panicSpeed = 300
   walkSpeed: number
 
-  constructor() {
-    super('behavior')
-  }
-
   collides(us: Entity, them: Entity) {
     if (us.getTrait(Killable)!.dead) {
       return

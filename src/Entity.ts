@@ -13,7 +13,6 @@ export enum Side {
 export abstract class Trait {
   tasks = [] as Array<() => void>
 
-  constructor(public NAME: string) {}
   update(entity: Entity, deltaTime: number, level: Level) {}
   obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {}
   collides(us: Entity, them: Entity) {}

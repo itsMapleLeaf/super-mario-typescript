@@ -4,10 +4,6 @@ import { Killable } from './Killable'
 export class Stomper extends Trait {
   bounceSpeed = 400
 
-  constructor() {
-    super('stomper')
-  }
-
   onStomp = (us: Entity, them: Entity) => {}
 
   bounce(us: Entity, them: Entity) {

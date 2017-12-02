@@ -9,10 +9,6 @@ export class Go extends Trait {
   dragFactor = 1 / 5000
   deceleration = 300
 
-  constructor() {
-    super('go')
-  }
-
   update(entity: Entity, deltaTime: number) {
     const absX = Math.abs(entity.vel.x)
 

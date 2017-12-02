@@ -4,10 +4,6 @@ import { TileResolverMatch } from '../TileResolver'
 export class Solid extends Trait {
   obstructs = true
 
-  constructor() {
-    super('solid')
-  }
-
   obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {
     if (!this.obstructs) return
 

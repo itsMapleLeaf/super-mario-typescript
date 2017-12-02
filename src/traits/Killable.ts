@@ -6,10 +6,6 @@ export class Killable extends Trait {
   deadTime = 0
   removeAfter = 2
 
-  constructor() {
-    super('killable')
-  }
-
   kill() {
     this.queue(() => {
       this.dead = true

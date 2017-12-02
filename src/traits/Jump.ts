@@ -9,10 +9,6 @@ export class Jump extends Trait {
   gracePeriod = 0.1
   speedBoost = 0.3
 
-  constructor() {
-    super('jump')
-  }
-
   start() {
     this.requestTime = this.gracePeriod
   }

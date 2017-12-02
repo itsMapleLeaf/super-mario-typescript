@@ -4,10 +4,6 @@ export class PendulumMove extends Trait {
   speed = -30
   enabled = true
 
-  constructor() {
-    super('pendulumMove')
-  }
-
   update(ent: Entity, deltaTime: number) {
     if (this.enabled) {
       ent.vel.x = this.speed

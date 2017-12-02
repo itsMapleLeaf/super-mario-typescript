@@ -9,10 +9,6 @@ import { Solid } from '../traits/Solid'
 import { Stomper } from '../traits/Stomper'
 
 class GoombaBehavior extends Trait {
-  constructor() {
-    super('behavior')
-  }
-
   collides(us: Entity, them: Entity) {
     if (us.getTrait(Killable)!.dead) {
       return

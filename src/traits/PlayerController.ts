@@ -10,10 +10,6 @@ export class PlayerController extends Trait {
   time = 300
   score = 0
 
-  constructor() {
-    super('playerController')
-  }
-
   setPlayer(entity: Entity) {
     this.player = entity
 
