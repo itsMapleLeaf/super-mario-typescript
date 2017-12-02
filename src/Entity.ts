@@ -10,14 +10,16 @@ export enum Side {
   right,
 }
 
+type TraitTask = () => void
+
 export abstract class Trait {
-  tasks = [] as Array<() => void>
+  tasks = [] as Array<TraitTask>
 
   update(entity: Entity, deltaTime: number, level: Level) {}
   obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {}
   collides(us: Entity, them: Entity) {}
 
-  queue(task: () => void) {
+  queue(task: TraitTask) {
     this.tasks.push(task)
   }
 
