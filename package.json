@@ -1,8 +1,8 @@
 {
   "name": "super-mario-typescript",
   "version": "0.1.0",
-  "description": "'Code Super Mario in JS' but with TypeScript",
-  "author": "just nobody",
+  "description": "Super Mario in TypeScript",
+  "author": "kingdaro",
   "license": "MIT",
   "scripts": {
     "start": "poi",
