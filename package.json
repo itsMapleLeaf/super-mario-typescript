@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --inline --hot",
-    "build": "webpack -p",
+    "build": "webpack --mode production",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -22,7 +22,8 @@
     "tslint-config-prettier": "^1.6.0",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.6.2",
-    "webpack": "^3.10.0",
+    "webpack": "^4.0.0-alpha.1",
+    "webpack-cli": "^1.5.2",
     "webpack-dev-server": "^2.9.7"
   }
 }
