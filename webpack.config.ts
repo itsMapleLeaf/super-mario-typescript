@@ -1,5 +1,5 @@
-import * as CopyPlugin from 'copy-webpack-plugin'
-import * as HTMLPlugin from 'html-webpack-plugin'
+// import * as CopyPlugin from 'copy-webpack-plugin'
+// import * as HTMLPlugin from 'html-webpack-plugin'
 import { resolve } from 'path'
 import * as webpack from 'webpack'
 

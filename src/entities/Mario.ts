@@ -5,9 +5,9 @@ import { SpriteSheet } from '../SpriteSheet'
 import { Go } from '../traits/Go'
 import { Jump } from '../traits/Jump'
 import { Killable } from '../traits/Killable'
+import { Physics } from '../traits/Physics'
 import { Solid } from '../traits/Solid'
 import { Stomper } from '../traits/Stomper'
-import { Physics } from '../traits/Physics'
 
 const FAST_DRAG = 1 / 5000
 const SLOW_DRAG = 1 / 1000

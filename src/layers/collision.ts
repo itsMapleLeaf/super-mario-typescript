@@ -1,6 +1,6 @@
 import { Camera } from '../Camera'
-import { Level } from '../Level'
 import { Entity } from '../Entity'
+import { Level } from '../Level'
 import { TileCollider } from '../TileCollider'
 
 function createEntityLayer(entities: Set<Entity>) {
