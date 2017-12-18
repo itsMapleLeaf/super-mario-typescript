@@ -23,7 +23,7 @@ export function loadJSON<T>(url: string): Promise<T> {
 }
 
 export async function loadSpriteSheet(name: string) {
-  const url = `public/sprites/${name}.json`
+  const url = `sprites/${name}.json`
   const sheetSpec = await loadJSON<SpriteSheetSpec>(url)
   const image = await loadImage(sheetSpec.imageURL)
 

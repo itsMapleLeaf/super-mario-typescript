@@ -15,7 +15,7 @@ export class Font {
 }
 
 export async function loadFont() {
-  const image = await loadImage('public/images/font.png')
+  const image = await loadImage('images/font.png')
   const fontSprite = new SpriteSheet(image, 8, 8)
 
   const size = 8
