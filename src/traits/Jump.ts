@@ -1,4 +1,5 @@
 import { Entity, Side, Trait } from '../Entity'
+import { GameContext } from '../types'
 
 export class Jump extends Trait {
   duration = 0.3
@@ -18,9 +19,10 @@ export class Jump extends Trait {
     this.requestTime = 0
   }
 
-  update(entity: Entity, deltaTime: number) {
+  update(entity: Entity, { audioBoard, deltaTime }: GameContext) {
     if (this.requestTime > 0) {
       if (this.ready > 0) {
+        audioBoard.play('jump')
         this.engageTime = this.duration
         this.requestTime = 0
       }

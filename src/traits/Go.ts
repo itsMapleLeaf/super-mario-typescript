@@ -1,4 +1,5 @@
 import { Entity, Trait } from '../Entity'
+import { GameContext } from '../types'
 import { Jump } from './Jump'
 
 export class Go extends Trait {
@@ -9,7 +10,7 @@ export class Go extends Trait {
   dragFactor = 1 / 5000
   deceleration = 300
 
-  update(entity: Entity, deltaTime: number) {
+  update(entity: Entity, { deltaTime }: GameContext) {
     const absX = Math.abs(entity.vel.x)
 
     if (this.dir !== 0) {

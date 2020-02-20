@@ -2,6 +2,7 @@ import { BoundingBox } from './BoundingBox'
 import { Level } from './Level'
 import { Vec2 } from './math'
 import { TileResolverMatch } from './TileResolver'
+import { GameContext } from './types'
 
 export enum Side {
   top,
@@ -15,7 +16,7 @@ type TraitTask = () => void
 export abstract class Trait {
   tasks = [] as Array<TraitTask>
 
-  update(entity: Entity, deltaTime: number, level: Level) {}
+  update(entity: Entity, gameContext: GameContext, level: Level) {}
   obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {}
   collides(us: Entity, them: Entity) {}
 
@@ -47,7 +48,7 @@ export class Entity {
     return trait
   }
 
-  getTrait<T extends Trait>(TraitClass: TraitConstructor<T>): T | void {
+  getTrait<T extends Trait>(TraitClass: TraitConstructor<T>): T | undefined {
     for (const trait of this.traits) {
       if (trait instanceof TraitClass) {
         return trait as T
@@ -56,11 +57,11 @@ export class Entity {
     return undefined
   }
 
-  update(deltaTime: number, level: Level) {
+  update(gameContext: GameContext, level: Level) {
     this.traits.forEach(trait => {
-      trait.update(this, deltaTime, level)
+      trait.update(this, gameContext, level)
     })
-    this.lifetime += deltaTime
+    this.lifetime += gameContext.deltaTime
   }
 
   draw(context: CanvasRenderingContext2D) {}
