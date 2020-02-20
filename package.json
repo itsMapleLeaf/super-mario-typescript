@@ -5,16 +5,12 @@
   "author": "kingdaro",
   "license": "MIT",
   "scripts": {
-    "start": "poi",
-    "build": "poi build",
+    "start": "poi --serve",
+    "build": "poi --prod",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "poi": "^9.6.1",
-    "poi-preset-typescript": "^9.0.2",
-    "tslint": "^5.8.0",
-    "tslint-config-prettier": "^1.6.0",
-    "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.6.2"
+    "poi": "^12.7.5",
+    "typescript": "~3.7.5"
   }
 }
