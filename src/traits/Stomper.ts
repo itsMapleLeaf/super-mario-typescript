@@ -28,9 +28,9 @@ export class Stomper extends Trait {
 
   obstruct(ent: Entity, side: Side) {}
 
-  update(entity: Entity, { audioBoard }: GameContext) {
+  update(entity: Entity, { audioContext }: GameContext) {
     if (this.didStomp) {
-      audioBoard.play('stomp')
+      entity.audio?.play('stomp', audioContext)
       this.didStomp = false
     }
   }

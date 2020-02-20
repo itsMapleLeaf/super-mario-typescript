@@ -1,3 +1,4 @@
+import { AudioBoard } from './AudioBoard'
 import { BoundingBox } from './BoundingBox'
 import { Level } from './Level'
 import { Vec2 } from './math'
@@ -35,6 +36,8 @@ interface TraitConstructor<T extends Trait> {
 }
 
 export class Entity {
+  // audio = new AudioBoard()
+  audio?: AudioBoard
   pos = new Vec2()
   vel = new Vec2()
   size = new Vec2()

@@ -1,12 +1,9 @@
-import { AudioBoard } from './AudioBoard'
 import { Camera } from './Camera'
 import { loadEntities } from './entities'
-import { Mario } from './entities/Mario'
 import { Entity } from './Entity'
 import { setupGamepad, setupKeyboard } from './input'
 import { createCollisionLayer } from './layers/collision'
 import { createDashboardLayer } from './layers/dashboard'
-import { createAudioLoader } from './loaders/audio'
 import { loadFont } from './loaders/font'
 import { createLevelLoader } from './loaders/level'
 import { Timer } from './Timer'
@@ -23,22 +20,19 @@ function createPlayerEnv(playerEntity: Entity) {
 
 async function main(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d')!
+  const audioContext = new AudioContext()
 
-  const [entityFactory, font] = await Promise.all([loadEntities(), loadFont()])
+  const [entityFactory, font] = await Promise.all([
+    loadEntities(audioContext),
+    loadFont(),
+  ])
+
   const loadLevel = createLevelLoader(entityFactory)
   const level = await loadLevel('1-1')
 
-  const audioContext = new AudioContext()
-  const audioBoard = new AudioBoard(audioContext)
-
-  const loadAudio = createAudioLoader(audioContext)
-
-  loadAudio('/audio/jump.ogg').then(buffer => audioBoard.add('jump', buffer))
-  loadAudio('/audio/stomp.ogg').then(buffer => audioBoard.add('stomp', buffer))
-
   const camera = new Camera()
 
-  const mario = entityFactory.mario() as Mario
+  const mario = entityFactory.mario()
   mario.pos.set(64, 64)
   level.entities.add(mario)
 
@@ -56,7 +50,7 @@ async function main(canvas: HTMLCanvasElement) {
   level.comp.layers.push(createDashboardLayer(font, playerEnv))
 
   timer.update = function update(deltaTime) {
-    level.update({ deltaTime, audioBoard })
+    level.update({ deltaTime, audioContext })
 
     camera.pos.x = Math.max(0, mario.pos.x - 100)
 

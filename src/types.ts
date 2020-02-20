@@ -1,6 +1,4 @@
-import { AudioBoard } from './AudioBoard'
-
 export type GameContext = {
-  audioBoard: AudioBoard
+  audioContext: AudioContext
   deltaTime: number
 }
