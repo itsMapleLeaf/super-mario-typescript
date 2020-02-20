@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2018",
     "module": "esnext",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "moduleResolution": "node",
+    "lib": ["dom", "esnext"],
     "strict": true,
     "noUnusedLocals": true,
+    "esModuleInterop": true,
     "downlevelIteration": true
   },
-  "include": [
-    "src/**/*",
-    "webpack.config.ts"
-  ]
+  "include": ["src"]
 }
