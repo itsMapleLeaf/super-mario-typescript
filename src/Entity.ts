@@ -15,7 +15,8 @@ export enum Side {
 type TraitTask = () => void
 
 export abstract class Trait {
-  tasks = [] as Array<TraitTask>
+  private tasks: TraitTask[] = []
+  sounds = new Set<string>()
 
   update(entity: Entity, gameContext: GameContext, level: Level) {}
   obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {}
@@ -28,6 +29,11 @@ export abstract class Trait {
   finalize() {
     this.tasks.forEach(task => task())
     this.tasks.splice(0)
+  }
+
+  playSounds(audioBoard: AudioBoard, audioContext: AudioContext) {
+    this.sounds.forEach(name => audioBoard.play(name, audioContext))
+    this.sounds.clear()
   }
 }
 
@@ -63,6 +69,7 @@ export class Entity {
   update(gameContext: GameContext, level: Level) {
     this.traits.forEach(trait => {
       trait.update(this, gameContext, level)
+      if (this.audio) trait.playSounds(this.audio, gameContext.audioContext)
     })
     this.lifetime += gameContext.deltaTime
   }
