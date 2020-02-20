@@ -33,9 +33,8 @@ async function main(canvas: HTMLCanvasElement) {
 
   const loadAudio = createAudioLoader(audioContext)
 
-  loadAudio('/audio/jump.ogg').then(buffer => {
-    audioBoard.add('jump', buffer)
-  })
+  loadAudio('/audio/jump.ogg').then(buffer => audioBoard.add('jump', buffer))
+  loadAudio('/audio/stomp.ogg').then(buffer => audioBoard.add('stomp', buffer))
 
   const camera = new Camera()
 

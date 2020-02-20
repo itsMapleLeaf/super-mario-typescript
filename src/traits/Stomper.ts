@@ -1,8 +1,10 @@
 import { Entity, Side, Trait } from '../Entity'
+import { GameContext } from '../types'
 import { Killable } from './Killable'
 
 export class Stomper extends Trait {
   bounceSpeed = 400
+  didStomp = false
 
   onStomp = (us: Entity, them: Entity) => {}
 
@@ -19,9 +21,17 @@ export class Stomper extends Trait {
 
     if (us.vel.y > them.vel.y) {
       this.bounce(us, them)
+      this.didStomp = true
       this.onStomp(us, them)
     }
   }
 
   obstruct(ent: Entity, side: Side) {}
+
+  update(entity: Entity, { audioBoard }: GameContext) {
+    if (this.didStomp) {
+      audioBoard.play('stomp')
+      this.didStomp = false
+    }
+  }
 }
