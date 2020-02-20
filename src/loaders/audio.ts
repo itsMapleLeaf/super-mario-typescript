@@ -16,7 +16,7 @@ export async function loadAudioBoard(name: string, audioContext: AudioContext) {
     `/sounds/${name}.json`,
   )
 
-  const audioBoard = new AudioBoard(audioContext)
+  const audioBoard = new AudioBoard()
 
   const audioLoadingTasks = Object.entries(audioSheet.fx).map(
     ([name, { url }]) =>
