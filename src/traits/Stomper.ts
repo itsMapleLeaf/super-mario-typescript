@@ -1,10 +1,8 @@
-import { Entity, Side, Trait } from '../Entity'
+import { Entity, Trait } from '../Entity'
 import { Killable } from './Killable'
 
 export class Stomper extends Trait {
   bounceSpeed = 400
-
-  onStomp = (us: Entity, them: Entity) => {}
 
   bounce(us: Entity, them: Entity) {
     us.bounds.bottom = them.bounds.top
@@ -20,9 +18,7 @@ export class Stomper extends Trait {
     if (us.vel.y > them.vel.y) {
       this.bounce(us, them)
       this.sounds.add('stomp')
-      this.onStomp(us, them)
+      this.events.emit('stomp', us, them)
     }
   }
-
-  obstruct(ent: Entity, side: Side) {}
 }

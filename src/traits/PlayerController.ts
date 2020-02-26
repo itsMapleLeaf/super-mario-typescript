@@ -16,9 +16,9 @@ export class PlayerController extends Trait {
 
     const stomper = this.player.getTrait(Stomper)
     if (stomper) {
-      stomper.onStomp = () => {
+      stomper.events.listen('stomp', () => {
         this.score += 100
-      }
+      })
     }
   }
 

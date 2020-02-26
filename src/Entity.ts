@@ -1,5 +1,6 @@
 import { AudioBoard } from './AudioBoard'
 import { BoundingBox } from './BoundingBox'
+import { EventEmitter } from './EventEmitter'
 import { Level } from './Level'
 import { Vec2 } from './math'
 import { TileResolverMatch } from './TileResolver'
@@ -17,6 +18,7 @@ type TraitTask = () => void
 export abstract class Trait {
   private tasks: TraitTask[] = []
   sounds = new Set<string>()
+  events = new EventEmitter()
 
   update(entity: Entity, gameContext: GameContext, level: Level) {}
   obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {}
@@ -60,7 +62,7 @@ export class Entity {
   getTrait<T extends Trait>(TraitClass: TraitConstructor<T>): T | undefined {
     for (const trait of this.traits) {
       if (trait instanceof TraitClass) {
-        return trait as T
+        return trait
       }
     }
     return undefined
