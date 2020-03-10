@@ -4,30 +4,30 @@ import { Keyboard } from './Keyboard'
 export function setupKeyboard(mario: Mario) {
   const input = new Keyboard()
 
-  function doJump(pressed: number) {
+  let leftState = 0
+  let rightState = 0
+
+  input.addListener('ArrowRight', keyState => {
+    rightState = keyState
+    mario.go.dir = rightState - leftState
+  })
+
+  input.addListener('ArrowLeft', keyState => {
+    leftState = keyState
+    mario.go.dir = rightState - leftState
+  })
+
+  input.addListener('ArrowUp', pressed => {
     if (pressed) {
       mario.jump.start()
     } else {
       mario.jump.cancel()
     }
-  }
+  })
 
-  function moveRight(keyState: number) {
-    mario.go.dir += keyState === 1 ? 1 : -1
-  }
-
-  function moveLeft(keyState: number) {
-    mario.go.dir += keyState === 1 ? -1 : 1
-  }
-
-  function run(keyState: number) {
+  input.addListener('KeyZ', keyState => {
     mario.setTurboState(keyState === 1)
-  }
-
-  input.addListener('KeyD', moveRight)
-  input.addListener('KeyA', moveLeft)
-  input.addListener('KeyP', doJump)
-  input.addListener('KeyO', run)
+  })
 
   return input
 }
