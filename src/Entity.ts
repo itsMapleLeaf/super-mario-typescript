@@ -33,9 +33,7 @@ export abstract class Trait {
   }
 }
 
-interface TraitConstructor<T extends Trait> {
-  new (): T
-}
+type TraitConstructor<T extends Trait> = new (...args: any[]) => T
 
 export class Entity {
   // audio = new AudioBoard()

@@ -7,13 +7,6 @@ import { Matrix } from '../math'
 import { SpriteSheet } from '../SpriteSheet'
 import { LevelSpec, LevelSpecPatterns, LevelSpecTile, TileRange } from './types'
 
-function setupCollision(levelSpec: LevelSpec, level: Level) {
-  const mergedTiles = levelSpec.layers.map(layer => layer.tiles).flat()
-
-  const collisionGrid = createCollisionGrid(mergedTiles, levelSpec.patterns)
-  level.setCollisionGrid(collisionGrid)
-}
-
 function setupBackground(
   levelSpec: LevelSpec,
   level: Level,
@@ -54,9 +47,15 @@ export function createLevelLoader(entityFactory: EntityFactoryDict) {
   return async function loadLevel(name: string) {
     const levelSpec = await loadJSON<LevelSpec>(`levels/${name}.json`)
     const backgroundSprites = await loadSpriteSheet(levelSpec.spriteSheet)
-    const level = new Level()
 
-    setupCollision(levelSpec, level)
+    const mergedLevelLayers = levelSpec.layers.map(layer => layer.tiles).flat()
+    const collisionGrid = createCollisionGrid(
+      mergedLevelLayers,
+      levelSpec.patterns,
+    )
+
+    const level = new Level(collisionGrid)
+
     setupBackground(levelSpec, level, backgroundSprites)
     setupEntities(levelSpec, level, entityFactory)
 

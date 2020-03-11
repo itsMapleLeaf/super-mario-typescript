@@ -6,13 +6,12 @@ import { Killable } from './Killable'
 import { Stomper } from './Stomper'
 
 export class PlayerController extends Trait {
-  player: Entity
   checkpoint = new Vec2(0, 0)
   time = 300
   score = 0
 
-  setPlayer(entity: Entity) {
-    this.player = entity
+  constructor(private player: Entity) {
+    super()
 
     const stomper = this.player.getTrait(Stomper)
     if (stomper) {

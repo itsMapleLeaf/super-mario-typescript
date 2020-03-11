@@ -16,14 +16,14 @@ export type BackgroundTile = {
 export class Level {
   comp = new Compositor()
   entities = new Set<Entity>()
-  tileCollider: TileCollider
   entityCollider = new EntityCollider(this.entities)
+  tileCollider: TileCollider
 
   gravity = 1500
   totalTime = 0
 
-  setCollisionGrid(matrix: Matrix<CollisionTile>) {
-    this.tileCollider = new TileCollider(matrix)
+  constructor(collisionGridMatrix: Matrix<CollisionTile>) {
+    this.tileCollider = new TileCollider(collisionGridMatrix)
   }
 
   update(gameContext: GameContext) {

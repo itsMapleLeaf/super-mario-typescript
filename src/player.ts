@@ -5,9 +5,8 @@ import { PlayerController } from './traits/PlayerController'
 
 export function createPlayerEnv(playerEntity: Entity) {
   const playerEnv = new Entity()
-  const playerControl = new PlayerController()
+  const playerControl = new PlayerController(playerEntity)
   playerControl.checkpoint.set(64, 64)
-  playerControl.setPlayer(playerEntity)
   playerEnv.addTrait(playerControl)
   return playerEnv
 }

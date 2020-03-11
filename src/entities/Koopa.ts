@@ -6,6 +6,7 @@ import { PendulumMove } from '../traits/PendulumMove'
 import { Physics } from '../traits/Physics'
 import { Solid } from '../traits/Solid'
 import { Stomper } from '../traits/Stomper'
+import { GameContext } from '../types'
 
 enum KoopaState {
   walking,
@@ -18,7 +19,7 @@ class KoopaBehavior extends Trait {
   hideTime = 0
   hideDuration = 5
   panicSpeed = 300
-  walkSpeed: number
+  walkSpeed?: number
 
   collides(us: Entity, them: Entity) {
     if (us.getTrait(Killable)!.dead) {
@@ -85,7 +86,7 @@ class KoopaBehavior extends Trait {
   unhide(us: Entity) {
     const walk = us.getTrait(PendulumMove)!
     walk.enabled = true
-    walk.speed = this.walkSpeed
+    if (this.walkSpeed != null) walk.speed = this.walkSpeed
     this.state = KoopaState.walking
   }
 
@@ -95,7 +96,7 @@ class KoopaBehavior extends Trait {
     this.state = KoopaState.panic
   }
 
-  update(us: Entity, deltaTime: number) {
+  update(us: Entity, { deltaTime }: GameContext) {
     if (this.state === KoopaState.hiding) {
       this.hideTime += deltaTime
 
