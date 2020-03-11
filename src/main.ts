@@ -1,23 +1,13 @@
 import { Camera } from './Camera'
 import { loadEntities } from './entities'
 import { Mario } from './entities/Mario'
-import { Entity } from './Entity'
 import { setupGamepad, setupKeyboard } from './input'
 import { createCollisionLayer } from './layers/collision'
 import { createDashboardLayer } from './layers/dashboard'
 import { loadFont } from './loaders/font'
 import { createLevelLoader } from './loaders/level'
+import { createPlayer, createPlayerEnv } from './player'
 import { Timer } from './Timer'
-import { PlayerController } from './traits/PlayerController'
-
-function createPlayerEnv(playerEntity: Entity) {
-  const playerEnv = new Entity()
-  const playerControl = new PlayerController()
-  playerControl.checkpoint.set(64, 64)
-  playerControl.setPlayer(playerEntity)
-  playerEnv.addTrait(playerControl)
-  return playerEnv
-}
 
 async function main(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d')!
@@ -33,7 +23,7 @@ async function main(canvas: HTMLCanvasElement) {
 
   const camera = new Camera()
 
-  const mario = entityFactory.mario!() as Mario
+  const mario = createPlayer(entityFactory.mario!()) as Mario
   mario.pos.set(64, 64)
   level.entities.add(mario)
 
