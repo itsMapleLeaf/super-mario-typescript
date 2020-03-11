@@ -23,7 +23,7 @@ export async function loadFont() {
 
   for (const [index, char] of [...characters].entries()) {
     const x = (index * size) % rowLen
-    const y = Math.floor(index * size / rowLen) * size
+    const y = Math.floor((index * size) / rowLen) * size
     fontSprite.define(char, x, y, size, size)
   }
 

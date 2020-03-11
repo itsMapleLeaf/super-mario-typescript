@@ -9,6 +9,7 @@
     "build": "poi src/index.html --prod",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext js,ts",
+    "format": "prettier --write \"@(src|public)/**/*.@(ts|js|json|html)\"",
     "ci": "npm-run-all --parallel --print-label lint typecheck"
   },
   "devDependencies": {
@@ -18,6 +19,7 @@
     "eslint-config-prettier": "^6.10.0",
     "npm-run-all": "^4.1.5",
     "poi": "^12.7.5",
+    "prettier": "^1.19.1",
     "typescript": "~3.7.5"
   }
 }

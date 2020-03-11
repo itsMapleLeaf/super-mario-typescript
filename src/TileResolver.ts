@@ -23,7 +23,10 @@ export class TileResolver<TileType> {
     }
   }
 
-  getByIndex(indexX: number, indexY: number): TileResolverMatch<TileType> | void {
+  getByIndex(
+    indexX: number,
+    indexY: number,
+  ): TileResolverMatch<TileType> | void {
     const tile = this.matrix.get(indexX, indexY)
     if (tile) {
       const x1 = indexX * this.tileSize

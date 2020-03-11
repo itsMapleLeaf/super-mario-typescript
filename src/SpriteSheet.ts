@@ -32,14 +32,26 @@ export class SpriteSheet {
   }
 
   defineTile(name: string, x: number, y: number) {
-    this.define(name, x * this.tileWidth, y * this.tileHeight, this.tileWidth, this.tileHeight)
+    this.define(
+      name,
+      x * this.tileWidth,
+      y * this.tileHeight,
+      this.tileWidth,
+      this.tileHeight,
+    )
   }
 
   defineAnimation(name: string, animation: Animation) {
     this.animations.set(name, animation)
   }
 
-  draw(name: string, context: CanvasRenderingContext2D, x: number, y: number, flip = false) {
+  draw(
+    name: string,
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    flip = false,
+  ) {
     const buffers = this.tiles.get(name)
     if (!buffers) {
       throw new Error(`SpriteSheet.draw(): Sprite "${name}" not found`)
@@ -47,7 +59,12 @@ export class SpriteSheet {
     context.drawImage(buffers[flip ? 1 : 0], x, y)
   }
 
-  drawTile(name: string, context: CanvasRenderingContext2D, x: number, y: number) {
+  drawTile(
+    name: string,
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+  ) {
     this.draw(name, context, x * this.tileWidth, y * this.tileHeight)
   }
 

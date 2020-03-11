@@ -4,7 +4,10 @@ import { Entity } from '../Entity'
 import { TileCollider } from '../TileCollider'
 
 function createEntityLayer(entities: Set<Entity>) {
-  return function drawBoundingBox(context: CanvasRenderingContext2D, camera: Camera) {
+  return function drawBoundingBox(
+    context: CanvasRenderingContext2D,
+    camera: Camera,
+  ) {
     context.strokeStyle = 'red'
     entities.forEach(entity => {
       context.strokeRect(
@@ -29,7 +32,10 @@ function createTileCandidateLayer(tileCollider: TileCollider) {
     return getByIndexOriginal.call(tileResolver, x, y)
   }
 
-  return function drawTileCandidates(context: CanvasRenderingContext2D, camera: Camera) {
+  return function drawTileCandidates(
+    context: CanvasRenderingContext2D,
+    camera: Camera,
+  ) {
     context.strokeStyle = 'blue'
 
     resolvedTiles.forEach(({ x, y }) => {
@@ -49,7 +55,10 @@ export function createCollisionLayer(level: Level) {
   const drawBoundingBoxes = createEntityLayer(level.entities)
   const drawTileCandidates = createTileCandidateLayer(level.tileCollider)
 
-  return function drawCollision(context: CanvasRenderingContext2D, camera: Camera) {
+  return function drawCollision(
+    context: CanvasRenderingContext2D,
+    camera: Camera,
+  ) {
     drawTileCandidates(context, camera)
     drawBoundingBoxes(context, camera)
   }

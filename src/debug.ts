@@ -3,7 +3,11 @@ import { Entity } from './Entity'
 
 const mouseEvents = ['mousedown', 'mousemove']
 
-export function setupMouseControl(canvas: HTMLCanvasElement, entity: Entity, camera: Camera) {
+export function setupMouseControl(
+  canvas: HTMLCanvasElement,
+  entity: Entity,
+  camera: Camera,
+) {
   let lastEvent: MouseEvent | void
 
   mouseEvents.forEach(eventName => {
@@ -11,7 +15,10 @@ export function setupMouseControl(canvas: HTMLCanvasElement, entity: Entity, cam
       if (event instanceof MouseEvent) {
         if (event.buttons === 1) {
           entity.vel.set(0, 0)
-          entity.pos.set(event.offsetX + camera.pos.x, event.offsetY + camera.pos.y)
+          entity.pos.set(
+            event.offsetX + camera.pos.x,
+            event.offsetY + camera.pos.y,
+          )
         } else if (
           event.buttons === 2 &&
           lastEvent &&

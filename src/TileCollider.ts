@@ -18,7 +18,12 @@ export class TileCollider {
       return
     }
 
-    const matches = this.tileResolver.searchByRange(x, x, entity.bounds.top, entity.bounds.bottom)
+    const matches = this.tileResolver.searchByRange(
+      x,
+      x,
+      entity.bounds.top,
+      entity.bounds.bottom,
+    )
 
     for (const match of matches) {
       if (match.tile.type !== 'ground') {
@@ -47,7 +52,12 @@ export class TileCollider {
       return
     }
 
-    const matches = this.tileResolver.searchByRange(entity.bounds.left, entity.bounds.right, y, y)
+    const matches = this.tileResolver.searchByRange(
+      entity.bounds.left,
+      entity.bounds.right,
+      y,
+      y,
+    )
 
     for (const match of matches) {
       if (match.tile.type !== 'ground') {

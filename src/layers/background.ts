@@ -29,7 +29,13 @@ export function createBackgroundLayer(
       if (col) {
         col.forEach((tile, y) => {
           if (sprites.animations.has(tile.name)) {
-            sprites.drawAnimation(tile.name, context, x - startIndex, y, level.totalTime)
+            sprites.drawAnimation(
+              tile.name,
+              context,
+              x - startIndex,
+              y,
+              level.totalTime,
+            )
           } else {
             sprites.drawTile(tile.name, context, x - startIndex, y)
           }
@@ -38,7 +44,10 @@ export function createBackgroundLayer(
     }
   }
 
-  return function drawBackgroundLayer(context: CanvasRenderingContext2D, camera: Camera) {
+  return function drawBackgroundLayer(
+    context: CanvasRenderingContext2D,
+    camera: Camera,
+  ) {
     const drawWidth = tileResolver.toIndex(camera.size.x)
     const drawFrom = tileResolver.toIndex(camera.pos.x)
     const drawTo = drawFrom + drawWidth
