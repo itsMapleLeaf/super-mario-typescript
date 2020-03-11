@@ -13,17 +13,31 @@ export async function loadCannon(
 ) {
   const audio = await loadAudioBoard('cannon', audioContext)
 
-  function emitBullet(cannon: Entity, level: Level) {
-    for (const player of findPlayers(level)) {
-      if (Math.abs(player.pos.x - cannon.pos.x) <= HOLD_FIRE_THRESHOLD) {
-        return
-      }
-    }
+  const getDiffX = (e1: Entity, e2: Entity) => Math.abs(e1.pos.x - e2.pos.x)
 
+  function emitBullet(cannon: Entity, level: Level) {
     const bullet = entityFactory.bullet?.()
     if (!bullet) return
 
+    const players = [...findPlayers(level)]
+
+    const shouldHoldFire = players.some(player => {
+      return getDiffX(player, cannon) <= HOLD_FIRE_THRESHOLD
+    })
+    if (shouldHoldFire) return
+
+    const closestPlayer = players.reduce((closest, current) => {
+      const closestDist = getDiffX(closest, cannon)
+      const currentDist = getDiffX(current, cannon)
+      return currentDist < closestDist ? current : closest
+    })
+
+    // can't use Math.sign here, otherwise we might get 0
+    const fireDirection = closestPlayer.pos.x < cannon.pos.x ? -1 : 1
+
     bullet.pos.copy(cannon.pos)
+    bullet.vel.x = 80 * fireDirection
+
     level.entities.add(bullet)
     cannon.sounds.add('shoot')
   }
