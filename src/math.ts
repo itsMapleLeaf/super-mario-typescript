@@ -5,6 +5,10 @@ export class Vec2 {
     this.x = x
     this.y = y
   }
+
+  copy(other: Vec2) {
+    this.set(other.x, other.y)
+  }
 }
 
 export class Matrix<T> {
