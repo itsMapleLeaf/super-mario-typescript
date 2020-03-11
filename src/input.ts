@@ -17,7 +17,7 @@ export function setupKeyboard(mario: Mario) {
     mario.go.dir = rightState - leftState
   })
 
-  input.addListener('ArrowUp', pressed => {
+  input.addListener('KeyZ', pressed => {
     if (pressed) {
       mario.jump.start()
     } else {
@@ -25,7 +25,7 @@ export function setupKeyboard(mario: Mario) {
     }
   })
 
-  input.addListener('KeyZ', keyState => {
+  input.addListener('KeyX', keyState => {
     mario.setTurboState(keyState === 1)
   })
 
