@@ -16,7 +16,10 @@ export class Stomper extends Trait {
     }
 
     if (us.vel.y > them.vel.y) {
-      this.bounce(us, them)
+      // using queue() fixes a race condition that can sometimes cause a stomper
+      // to incorrectly get killed by a killable
+      this.queue(() => this.bounce(us, them))
+
       this.sounds.add('stomp')
       this.events.emit('stomp', us, them)
     }
