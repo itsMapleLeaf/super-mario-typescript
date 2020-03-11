@@ -17,7 +17,6 @@ type TraitTask = () => void
 
 export abstract class Trait {
   private tasks: TraitTask[] = []
-  sounds = new Set<string>()
   events = new EventEmitter()
 
   update(entity: Entity, gameContext: GameContext, level: Level) {}
@@ -31,11 +30,6 @@ export abstract class Trait {
   finalize() {
     this.tasks.forEach(task => task())
     this.tasks.splice(0)
-  }
-
-  playSounds(audioBoard: AudioBoard, audioContext: AudioContext) {
-    this.sounds.forEach(name => audioBoard.play(name, audioContext))
-    this.sounds.clear()
   }
 }
 
@@ -53,6 +47,7 @@ export class Entity {
   bounds = new BoundingBox(this.pos, this.size, this.offset)
   traits = [] as Trait[]
   lifetime = 0
+  sounds = new Set<string>()
 
   addTrait<T extends Trait>(trait: T): T {
     this.traits.push(trait)
@@ -71,8 +66,10 @@ export class Entity {
   update(gameContext: GameContext, level: Level) {
     this.traits.forEach(trait => {
       trait.update(this, gameContext, level)
-      if (this.audio) trait.playSounds(this.audio, gameContext.audioContext)
     })
+
+    if (this.audio) this.playSounds(this.audio, gameContext.audioContext)
+
     this.lifetime += gameContext.deltaTime
   }
 
@@ -94,5 +91,10 @@ export class Entity {
     this.traits.forEach(trait => {
       trait.collides(this, candidate)
     })
+  }
+
+  private playSounds(audioBoard: AudioBoard, audioContext: AudioContext) {
+    this.sounds.forEach(name => audioBoard.play(name, audioContext))
+    this.sounds.clear()
   }
 }

@@ -20,7 +20,7 @@ export class Stomper extends Trait {
       // to incorrectly get killed by a killable
       this.queue(() => this.bounce(us, them))
 
-      this.sounds.add('stomp')
+      us.sounds.add('stomp')
       this.events.emit('stomp', us, them)
     }
   }
