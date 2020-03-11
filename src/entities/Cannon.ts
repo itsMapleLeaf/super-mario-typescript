@@ -8,14 +8,15 @@ export async function loadCannon(
   audioContext: AudioContext,
   entityFactory: EntityFactoryDict,
 ) {
-  const audio = await loadAudioBoard('mario', audioContext)
+  const audio = await loadAudioBoard('cannon', audioContext)
 
-  function emitBullet(entity: Entity, level: Level) {
+  function emitBullet(cannon: Entity, level: Level) {
     const bullet = entityFactory.bullet?.()
     if (!bullet) return
 
-    bullet.pos.copy(entity.pos)
+    bullet.pos.copy(cannon.pos)
     level.entities.add(bullet)
+    cannon.sounds.add('shoot')
   }
 
   return function createCannon() {
@@ -23,6 +24,7 @@ export async function loadCannon(
     cannon.audio = audio
 
     const emitter = cannon.addTrait(new Emitter())
+    emitter.interval = 4
     emitter.emitters.push(emitBullet)
 
     return cannon
