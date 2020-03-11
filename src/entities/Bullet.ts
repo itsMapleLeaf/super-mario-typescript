@@ -47,7 +47,7 @@ export async function loadBullet() {
     bullet.addTrait(new Velocity())
 
     bullet.draw = context => {
-      sprites.draw('bullet', context, 0, 0)
+      sprites.draw('bullet', context, 0, 0, bullet.vel.x < 0)
     }
 
     return bullet
