@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext js,ts",
     "format": "prettier --write \"@(src|public)/**/*.@(ts|js|json|html)\"",
-    "ci": "npm-run-all --parallel --print-label lint typecheck"
+    "ci": "npm-run-all --parallel --print-label lint typecheck build"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.20.0",
