@@ -51,6 +51,8 @@ async function main(canvas: HTMLCanvasElement) {
   level.comp.layers.push(createDashboardLayer(font, playerEnv))
 
   timer.update = function update(deltaTime) {
+    if (!document.hasFocus()) return
+
     level.update({ deltaTime, audioContext })
 
     camera.pos.x = Math.max(0, mario.pos.x - 100)
