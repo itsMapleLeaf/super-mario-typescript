@@ -1,4 +1,4 @@
-import { EntityFactory } from '../entities'
+import { EntityFactoryDict } from '../entities'
 import { createBackgroundLayer } from '../layers/background'
 import { createSpriteLayer } from '../layers/sprites'
 import { BackgroundTile, CollisionTile, Level } from '../Level'
@@ -8,25 +8,39 @@ import { SpriteSheet } from '../SpriteSheet'
 import { LevelSpec, LevelSpecPatterns, LevelSpecTile, TileRange } from './types'
 
 function setupCollision(levelSpec: LevelSpec, level: Level) {
-  const mergedTiles = levelSpec.layers.reduce<LevelSpecTile[]>((mergedTiles, layerSpec) => {
-    return mergedTiles.concat(layerSpec.tiles)
-  }, [])
+  const mergedTiles = levelSpec.layers.map(layer => layer.tiles).flat()
 
   const collisionGrid = createCollisionGrid(mergedTiles, levelSpec.patterns)
   level.setCollisionGrid(collisionGrid)
 }
 
-function setupBackground(levelSpec: LevelSpec, level: Level, backgroundSprites: SpriteSheet) {
+function setupBackground(
+  levelSpec: LevelSpec,
+  level: Level,
+  backgroundSprites: SpriteSheet,
+) {
   for (const layer of levelSpec.layers) {
     const backgroundGrid = createBackgroundGrid(layer.tiles, levelSpec.patterns)
-    const backgroundLayer = createBackgroundLayer(level, backgroundGrid, backgroundSprites)
+    const backgroundLayer = createBackgroundLayer(
+      level,
+      backgroundGrid,
+      backgroundSprites,
+    )
     level.comp.layers.push(backgroundLayer)
   }
 }
 
-function setupEntities(levelSpec: LevelSpec, level: Level, entityFactory: EntityFactory) {
-  levelSpec.entities.forEach(({ name, position: [x, y] }) => {
+function setupEntities(
+  levelSpec: LevelSpec,
+  level: Level,
+  entityFactory: EntityFactoryDict,
+) {
+  levelSpec.entities.forEach(({ name, pos: [x, y] }) => {
     const createEntity = entityFactory[name]
+    if (!createEntity) {
+      throw new Error(`Could not find factory function for entity "${name}"`)
+    }
+
     const entity = createEntity()
     entity.pos.set(x, y)
     level.entities.add(entity)
@@ -36,7 +50,7 @@ function setupEntities(levelSpec: LevelSpec, level: Level, entityFactory: Entity
   level.comp.layers.push(spriteLayer)
 }
 
-export function createLevelLoader(entityFactory: EntityFactory) {
+export function createLevelLoader(entityFactory: EntityFactoryDict) {
   return async function loadLevel(name: string) {
     const levelSpec = await loadJSON<LevelSpec>(`levels/${name}.json`)
     const backgroundSprites = await loadSpriteSheet(levelSpec.spriteSheet)
@@ -50,7 +64,10 @@ export function createLevelLoader(entityFactory: EntityFactory) {
   }
 }
 
-function createCollisionGrid(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
+function createCollisionGrid(
+  tiles: LevelSpecTile[],
+  patterns: LevelSpecPatterns,
+) {
   const grid = new Matrix<CollisionTile>()
 
   for (const { x, y, tile } of expandTiles(tiles, patterns)) {
@@ -60,7 +77,10 @@ function createCollisionGrid(tiles: LevelSpecTile[], patterns: LevelSpecPatterns
   return grid
 }
 
-function createBackgroundGrid(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
+function createBackgroundGrid(
+  tiles: LevelSpecTile[],
+  patterns: LevelSpecPatterns,
+) {
   const grid = new Matrix<BackgroundTile>()
 
   for (const { x, y, tile } of expandTiles(tiles, patterns)) {
@@ -70,7 +90,12 @@ function createBackgroundGrid(tiles: LevelSpecTile[], patterns: LevelSpecPattern
   return grid
 }
 
-function* expandSpan(xStart: number, xLength: number, yStart: number, yLength: number) {
+function* expandSpan(
+  xStart: number,
+  xLength: number,
+  yStart: number,
+  yLength: number,
+) {
   const xEnd = xStart + xLength
   const yEnd = yStart + yLength
   for (let x = xStart; x < xEnd; x++) {
@@ -131,7 +156,9 @@ function* expandTiles(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
             y: derivedY,
           }
         } else {
-          throw new Error(`Tile does not have a name or a pattern: ${JSON.stringify(tile)}`)
+          throw new Error(
+            `Tile does not have a name or a pattern: ${JSON.stringify(tile)}`,
+          )
         }
       }
     }

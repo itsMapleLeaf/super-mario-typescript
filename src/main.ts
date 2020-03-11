@@ -1,5 +1,6 @@
 import { Camera } from './Camera'
 import { loadEntities } from './entities'
+import { Mario } from './entities/Mario'
 import { Entity } from './Entity'
 import { setupGamepad, setupKeyboard } from './input'
 import { createCollisionLayer } from './layers/collision'
@@ -32,7 +33,7 @@ async function main(canvas: HTMLCanvasElement) {
 
   const camera = new Camera()
 
-  const mario = entityFactory.mario()
+  const mario = entityFactory.mario!() as Mario
   mario.pos.set(64, 64)
   level.entities.add(mario)
 

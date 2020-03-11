@@ -11,7 +11,7 @@ export type LevelSpecLayer = {
 
 export type LevelSpecEntity = {
   name: string
-  position: [number, number]
+  pos: [number, number]
 }
 
 export type LevelSpecPatterns = {
