@@ -1,12 +1,26 @@
-import { Entity, Side } from './Entity'
+import { Entity } from './Entity'
 import { CollisionTile } from './Level'
 import { Matrix } from './math'
-import { TileResolver } from './TileResolver'
+import { TileResolver, TileResolverMatch } from './TileResolver'
+import { brick } from './tiles/brick'
+import { ground } from './tiles/ground'
+import { Dict } from './types'
+
+export type TileColliderHandler = (
+  entity: Entity,
+  match: TileResolverMatch<CollisionTile>,
+) => void
+
+// this might be better typed as Dict<[TileColliderHandler, TileColliderHandler]>
+const handlers: Dict<TileColliderHandler[]> = {
+  ground,
+  brick,
+}
 
 export class TileCollider {
   tiles = new TileResolver(this.tileMatrix)
 
-  constructor(public tileMatrix: Matrix<CollisionTile>) {}
+  constructor(private tileMatrix: Matrix<CollisionTile>) {}
 
   checkX(entity: Entity) {
     let x
@@ -26,19 +40,7 @@ export class TileCollider {
     )
 
     for (const match of matches) {
-      if (match.tile.type !== 'ground') {
-        continue
-      }
-
-      if (entity.vel.x > 0) {
-        if (entity.bounds.right > match.x1) {
-          entity.obstruct(Side.right, match)
-        }
-      } else if (entity.vel.x < 0) {
-        if (entity.bounds.left < match.x2) {
-          entity.obstruct(Side.left, match)
-        }
-      }
+      this.handle(0, entity, match)
     }
   }
 
@@ -60,19 +62,15 @@ export class TileCollider {
     )
 
     for (const match of matches) {
-      if (match.tile.type !== 'ground') {
-        continue
-      }
-
-      if (entity.vel.y > 0) {
-        if (entity.bounds.bottom > match.y1) {
-          entity.obstruct(Side.bottom, match)
-        }
-      } else if (entity.vel.y < 0) {
-        if (entity.bounds.top < match.y2) {
-          entity.obstruct(Side.top, match)
-        }
-      }
+      this.handle(1, entity, match)
     }
+  }
+
+  private handle(
+    index: number,
+    entity: Entity,
+    match: TileResolverMatch<CollisionTile>,
+  ) {
+    handlers[match.tile.type]?.[index]?.(entity, match)
   }
 }
