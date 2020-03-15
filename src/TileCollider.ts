@@ -1,4 +1,5 @@
 import { Entity } from './Entity'
+import { Level } from './Level'
 import {
   TileResolver,
   TileResolverMatch,
@@ -6,12 +7,14 @@ import {
 } from './TileResolver'
 import { brick } from './tiles/brick'
 import { ground } from './tiles/ground'
-import { Dict } from './types'
+import { Dict, GameContext } from './types'
 
 export type TileColliderHandler = (
   entity: Entity,
   match: TileResolverMatch,
   resolver: TileResolver,
+  gameContext: GameContext,
+  level: Level,
 ) => void
 
 // this might be better typed as Dict<[TileColliderHandler, TileColliderHandler]>
@@ -27,7 +30,7 @@ export class TileCollider {
     this.resolvers.push(new TileResolver(tileMatrix))
   }
 
-  checkX(entity: Entity) {
+  checkX(entity: Entity, gameContext: GameContext, level: Level) {
     let x
     if (entity.vel.x > 0) {
       x = entity.bounds.right
@@ -46,12 +49,12 @@ export class TileCollider {
       )
 
       for (const match of matches) {
-        this.handle(0, entity, match, resolver)
+        this.handle(0, entity, match, resolver, gameContext, level)
       }
     }
   }
 
-  checkY(entity: Entity) {
+  checkY(entity: Entity, gameContext: GameContext, level: Level) {
     let y
     if (entity.vel.y > 0) {
       y = entity.bounds.bottom
@@ -70,7 +73,7 @@ export class TileCollider {
       )
 
       for (const match of matches) {
-        this.handle(1, entity, match, resolver)
+        this.handle(1, entity, match, resolver, gameContext, level)
       }
     }
   }
@@ -80,7 +83,15 @@ export class TileCollider {
     entity: Entity,
     match: TileResolverMatch,
     resolver: TileResolver,
+    gameContext: GameContext,
+    level: Level,
   ) {
-    handlers[match.tile.type]?.[index]?.(entity, match, resolver)
+    handlers[match.tile.type]?.[index]?.(
+      entity,
+      match,
+      resolver,
+      gameContext,
+      level,
+    )
   }
 }

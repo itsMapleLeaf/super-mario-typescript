@@ -6,7 +6,7 @@ import { loadMario } from './entities/Mario'
 import { Entity } from './Entity'
 import { Dict } from './types'
 
-type EntityFactory = () => Entity
+export type EntityFactory = () => Entity
 
 export type EntityFactoryDict = Dict<EntityFactory>
 

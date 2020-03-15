@@ -43,7 +43,7 @@ async function main(canvas: HTMLCanvasElement) {
   timer.update = function update(deltaTime) {
     if (!document.hasFocus()) return
 
-    level.update({ deltaTime, audioContext })
+    level.update({ deltaTime, audioContext, entityFactory })
 
     camera.pos.x = Math.max(0, mario.pos.x - 100)
 
