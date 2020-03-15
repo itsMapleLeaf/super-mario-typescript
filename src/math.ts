@@ -12,7 +12,9 @@ export class Vec2 {
 }
 
 export class Matrix<T> {
-  grid = [] as T[][]
+  // TODO: implement iterator
+
+  private grid: T[][] = []
 
   set(x: number, y: number, value: T) {
     if (!this.grid[x]) {
@@ -21,9 +23,14 @@ export class Matrix<T> {
     this.grid[x][y] = value
   }
 
-  get(x: number, y: number): T | void {
+  get(x: number, y: number): T | undefined {
     const col = this.grid[x]
     if (col) return col[y]
+  }
+
+  delete(x: number, y: number) {
+    const col = this.grid[x]
+    if (col) delete col[y]
   }
 
   forEach(callback: (value: T, x: number, y: number) => void) {
