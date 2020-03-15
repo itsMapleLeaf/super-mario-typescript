@@ -1,6 +1,6 @@
 import { Camera } from '../Camera'
-import { Level } from '../Level'
 import { Entity } from '../Entity'
+import { Level } from '../Level'
 import { TileCollider } from '../TileCollider'
 
 function createEntityLayer(entities: Set<Entity>) {
@@ -21,7 +21,7 @@ function createEntityLayer(entities: Set<Entity>) {
 }
 
 function createTileCandidateLayer(tileCollider: TileCollider) {
-  const tileResolver = tileCollider.tileResolver
+  const tileResolver = tileCollider.tiles
   const tileSize = tileResolver.tileSize
   const resolvedTiles = [] as Array<{ x: number; y: number }>
 
