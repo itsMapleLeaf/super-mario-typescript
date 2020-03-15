@@ -1,15 +1,20 @@
+import { LevelSpecTile } from './loaders/types'
 import { Matrix } from './math'
 
-export type TileResolverMatch<TileType> = {
-  tile: TileType
+export type TileResolverMatch = {
+  tile: LevelSpecTile
   x1: number
   x2: number
   y1: number
   y2: number
+  indexX: number
+  indexY: number
 }
 
-export class TileResolver<TileType> {
-  constructor(public matrix: Matrix<TileType>, public tileSize = 16) {}
+export type TileResolverMatrix = Matrix<LevelSpecTile>
+
+export class TileResolver {
+  constructor(public matrix: TileResolverMatrix, public tileSize = 16) {}
 
   toIndex(pos: number) {
     return Math.floor(pos / this.tileSize)
@@ -23,17 +28,14 @@ export class TileResolver<TileType> {
     }
   }
 
-  getByIndex(
-    indexX: number,
-    indexY: number,
-  ): TileResolverMatch<TileType> | void {
+  getByIndex(indexX: number, indexY: number): TileResolverMatch | undefined {
     const tile = this.matrix.get(indexX, indexY)
     if (tile) {
       const x1 = indexX * this.tileSize
       const x2 = (indexX + 1) * this.tileSize
       const y1 = indexY * this.tileSize
       const y2 = (indexY + 1) * this.tileSize
-      return { tile, x1, x2, y1, y2 }
+      return { tile, x1, x2, y1, y2, indexX, indexY }
     }
   }
 

@@ -1,14 +1,17 @@
 import { Entity } from './Entity'
-import { CollisionTile } from './Level'
-import { Matrix } from './math'
-import { TileResolver, TileResolverMatch } from './TileResolver'
+import {
+  TileResolver,
+  TileResolverMatch,
+  TileResolverMatrix,
+} from './TileResolver'
 import { brick } from './tiles/brick'
 import { ground } from './tiles/ground'
 import { Dict } from './types'
 
 export type TileColliderHandler = (
   entity: Entity,
-  match: TileResolverMatch<CollisionTile>,
+  match: TileResolverMatch,
+  resolver: TileResolver,
 ) => void
 
 // this might be better typed as Dict<[TileColliderHandler, TileColliderHandler]>
@@ -18,9 +21,11 @@ const handlers: Dict<TileColliderHandler[]> = {
 }
 
 export class TileCollider {
-  tiles = new TileResolver(this.tileMatrix)
+  resolvers: TileResolver[] = []
 
-  constructor(private tileMatrix: Matrix<CollisionTile>) {}
+  addGrid(tileMatrix: TileResolverMatrix) {
+    this.resolvers.push(new TileResolver(tileMatrix))
+  }
 
   checkX(entity: Entity) {
     let x
@@ -32,15 +37,17 @@ export class TileCollider {
       return
     }
 
-    const matches = this.tiles.searchByRange(
-      x,
-      x,
-      entity.bounds.top,
-      entity.bounds.bottom,
-    )
+    for (const resolver of this.resolvers) {
+      const matches = resolver.searchByRange(
+        x,
+        x,
+        entity.bounds.top,
+        entity.bounds.bottom,
+      )
 
-    for (const match of matches) {
-      this.handle(0, entity, match)
+      for (const match of matches) {
+        this.handle(0, entity, match, resolver)
+      }
     }
   }
 
@@ -54,23 +61,26 @@ export class TileCollider {
       return
     }
 
-    const matches = this.tiles.searchByRange(
-      entity.bounds.left,
-      entity.bounds.right,
-      y,
-      y,
-    )
+    for (const resolver of this.resolvers) {
+      const matches = resolver.searchByRange(
+        entity.bounds.left,
+        entity.bounds.right,
+        y,
+        y,
+      )
 
-    for (const match of matches) {
-      this.handle(1, entity, match)
+      for (const match of matches) {
+        this.handle(1, entity, match, resolver)
+      }
     }
   }
 
   private handle(
     index: number,
     entity: Entity,
-    match: TileResolverMatch<CollisionTile>,
+    match: TileResolverMatch,
+    resolver: TileResolver,
   ) {
-    handlers[match.tile.type]?.[index]?.(entity, match)
+    handlers[match.tile.type]?.[index]?.(entity, match, resolver)
   }
 }

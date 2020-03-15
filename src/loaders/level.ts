@@ -1,10 +1,11 @@
 import { EntityFactoryDict } from '../entities'
 import { createBackgroundLayer } from '../layers/background'
 import { createSpriteLayer } from '../layers/sprites'
-import { BackgroundTile, CollisionTile, Level } from '../Level'
+import { Level } from '../Level'
 import { loadJSON, loadSpriteSheet } from '../loaders'
 import { Matrix } from '../math'
 import { SpriteSheet } from '../SpriteSheet'
+import { TileResolverMatrix } from '../TileResolver'
 import { LevelSpec, LevelSpecPatterns, LevelSpecTile, TileRange } from './types'
 
 function setupBackground(
@@ -13,13 +14,14 @@ function setupBackground(
   backgroundSprites: SpriteSheet,
 ) {
   for (const layer of levelSpec.layers) {
-    const backgroundGrid = createBackgroundGrid(layer.tiles, levelSpec.patterns)
+    const grid = createGrid(layer.tiles, levelSpec.patterns)
     const backgroundLayer = createBackgroundLayer(
       level,
-      backgroundGrid,
+      grid,
       backgroundSprites,
     )
     level.comp.layers.push(backgroundLayer)
+    level.tileCollider.addGrid(grid)
   }
 }
 
@@ -48,13 +50,7 @@ export function createLevelLoader(entityFactory: EntityFactoryDict) {
     const levelSpec = await loadJSON<LevelSpec>(`levels/${name}.json`)
     const backgroundSprites = await loadSpriteSheet(levelSpec.spriteSheet)
 
-    const mergedLevelLayers = levelSpec.layers.map(layer => layer.tiles).flat()
-    const collisionGrid = createCollisionGrid(
-      mergedLevelLayers,
-      levelSpec.patterns,
-    )
-
-    const level = new Level(collisionGrid)
+    const level = new Level()
 
     setupBackground(levelSpec, level, backgroundSprites)
     setupEntities(levelSpec, level, entityFactory)
@@ -63,27 +59,11 @@ export function createLevelLoader(entityFactory: EntityFactoryDict) {
   }
 }
 
-function createCollisionGrid(
-  tiles: LevelSpecTile[],
-  patterns: LevelSpecPatterns,
-) {
-  const grid = new Matrix<CollisionTile>()
+function createGrid(tiles: LevelSpecTile[], patterns: LevelSpecPatterns) {
+  const grid: TileResolverMatrix = new Matrix()
 
   for (const { x, y, tile } of expandTiles(tiles, patterns)) {
-    grid.set(x, y, { type: tile.type })
-  }
-
-  return grid
-}
-
-function createBackgroundGrid(
-  tiles: LevelSpecTile[],
-  patterns: LevelSpecPatterns,
-) {
-  const grid = new Matrix<BackgroundTile>()
-
-  for (const { x, y, tile } of expandTiles(tiles, patterns)) {
-    grid.set(x, y, { name: tile.name! })
+    grid.set(x, y, tile)
   }
 
   return grid

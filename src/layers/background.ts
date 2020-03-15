@@ -1,16 +1,11 @@
 import { Camera } from '../Camera'
 import { Level } from '../Level'
-import { Matrix } from '../math'
 import { SpriteSheet } from '../SpriteSheet'
-import { TileResolver } from '../TileResolver'
-
-export type BackgroundTile = {
-  name: string
-}
+import { TileResolver, TileResolverMatrix } from '../TileResolver'
 
 export function createBackgroundLayer(
   level: Level,
-  tiles: Matrix<BackgroundTile>,
+  tiles: TileResolverMatrix,
   sprites: SpriteSheet,
 ) {
   const tileResolver = new TileResolver(tiles)
@@ -25,9 +20,12 @@ export function createBackgroundLayer(
     context.clearRect(0, 0, buffer.width, buffer.height)
 
     for (let x = startIndex; x <= endIndex; x++) {
+      // TODO: iterate over tiles instead of accessing grid
       const col = tiles.grid[x]
       if (col) {
-        col.forEach((tile, y) => {
+        for (const [y, tile] of col.entries()) {
+          if (!tile.name) continue
+
           if (sprites.animations.has(tile.name)) {
             sprites.drawAnimation(
               tile.name,
@@ -39,7 +37,7 @@ export function createBackgroundLayer(
           } else {
             sprites.drawTile(tile.name, context, x - startIndex, y)
           }
-        })
+        }
       }
     }
   }

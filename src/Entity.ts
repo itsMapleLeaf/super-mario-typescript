@@ -20,7 +20,7 @@ export abstract class Trait {
   events = new EventEmitter()
 
   update(entity: Entity, gameContext: GameContext, level: Level) {}
-  obstruct(entity: Entity, side: Side, match: TileResolverMatch<any>) {}
+  obstruct(entity: Entity, side: Side, match: TileResolverMatch) {}
   collides(us: Entity, them: Entity) {}
 
   queue(task: TraitTask) {
@@ -79,7 +79,7 @@ export class Entity {
     })
   }
 
-  obstruct(side: Side, match: TileResolverMatch<any>) {
+  obstruct(side: Side, match: TileResolverMatch) {
     this.traits.forEach(trait => {
       trait.obstruct(this, side, match)
     })
