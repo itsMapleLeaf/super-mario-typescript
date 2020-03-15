@@ -24,7 +24,7 @@ export function createBackgroundLayer(
       const col = tiles.grid[x]
       if (col) {
         for (const [y, tile] of col.entries()) {
-          if (!tile.name) continue
+          if (!tile || !tile.name) continue
 
           if (sprites.animations.has(tile.name)) {
             sprites.drawAnimation(
