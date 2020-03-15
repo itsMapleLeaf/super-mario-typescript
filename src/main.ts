@@ -11,6 +11,8 @@ import { Timer } from './Timer'
 
 async function main(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d')!
+  context.imageSmoothingEnabled = false
+
   const audioContext = new AudioContext()
 
   const [entityFactory, font] = await Promise.all([
