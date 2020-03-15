@@ -9,13 +9,15 @@ import { brick } from './tiles/brick'
 import { ground } from './tiles/ground'
 import { Dict, GameContext } from './types'
 
-export type TileColliderHandler = (
-  entity: Entity,
-  match: TileResolverMatch,
-  resolver: TileResolver,
-  gameContext: GameContext,
-  level: Level,
-) => void
+export type TileColliderContext = {
+  entity: Entity
+  match: TileResolverMatch
+  resolver: TileResolver
+  gameContext: GameContext
+  level: Level
+}
+
+export type TileColliderHandler = (context: TileColliderContext) => void
 
 // this might be better typed as Dict<[TileColliderHandler, TileColliderHandler]>
 const handlers: Dict<TileColliderHandler[]> = {
@@ -86,12 +88,14 @@ export class TileCollider {
     gameContext: GameContext,
     level: Level,
   ) {
-    handlers[match.tile.type]?.[index]?.(
+    const tileCollisionContext: TileColliderContext = {
       entity,
       match,
       resolver,
       gameContext,
       level,
-    )
+    }
+
+    handlers[match.tile.type]?.[index]?.(tileCollisionContext)
   }
 }

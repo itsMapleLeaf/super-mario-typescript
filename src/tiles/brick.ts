@@ -2,13 +2,7 @@ import { Side } from '../Entity'
 import { TileColliderHandler } from '../TileCollider'
 import { Player } from '../traits/Player'
 
-const handleX: TileColliderHandler = (
-  entity,
-  match,
-  resolver,
-  gameContext,
-  level,
-) => {
+const handleX: TileColliderHandler = ({ entity, match }) => {
   if (entity.vel.x > 0) {
     if (entity.bounds.right > match.x1) {
       entity.obstruct(Side.right, match)
@@ -20,13 +14,13 @@ const handleX: TileColliderHandler = (
   }
 }
 
-const handleY: TileColliderHandler = (
+const handleY: TileColliderHandler = ({
   entity,
   match,
   resolver,
   gameContext,
   level,
-) => {
+}) => {
   if (entity.vel.y > 0) {
     if (entity.bounds.bottom > match.y1) {
       entity.obstruct(Side.bottom, match)
