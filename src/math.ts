@@ -33,11 +33,20 @@ export class Matrix<T> {
     if (col) delete col[y]
   }
 
+  *itemsInRange(left: number, top: number, right: number, bottom: number) {
+    for (let x = left; x <= right; x++) {
+      for (let y = top; y <= bottom; y++) {
+        const value = this.get(x, y)
+        if (value) yield [value, x, y] as const
+      }
+    }
+  }
+
   forEach(callback: (value: T, x: number, y: number) => void) {
-    this.grid.forEach((column, x) => {
-      column.forEach((value, y) => {
+    for (const [x, col] of this.grid.entries()) {
+      for (const [y, value] of col.entries()) {
         callback(value, x, y)
-      })
-    })
+      }
+    }
   }
 }
