@@ -19,25 +19,25 @@ export function createBackgroundLayer(
   function drawTiles(startIndex: number, endIndex: number) {
     context.clearRect(0, 0, buffer.width, buffer.height)
 
-    for (let x = startIndex; x <= endIndex; x++) {
-      // TODO: iterate over tiles instead of accessing grid
-      const col = tiles.grid[x]
-      if (col) {
-        for (const [y, tile] of col.entries()) {
-          if (!tile || !tile.name) continue
+    const items = tiles.itemsInRange(
+      startIndex,
+      0,
+      endIndex,
+      buffer.height / 16,
+    )
 
-          if (sprites.animations.has(tile.name)) {
-            sprites.drawAnimation(
-              tile.name,
-              context,
-              x - startIndex,
-              y,
-              level.totalTime,
-            )
-          } else {
-            sprites.drawTile(tile.name, context, x - startIndex, y)
-          }
-        }
+    for (const [tile, x, y] of items) {
+      if (!tile.name) continue
+      if (sprites.animations.has(tile.name)) {
+        sprites.drawAnimation(
+          tile.name,
+          context,
+          x - startIndex,
+          y,
+          level.totalTime,
+        )
+      } else {
+        sprites.drawTile(tile.name, context, x - startIndex, y)
       }
     }
   }
