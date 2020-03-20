@@ -1,6 +1,7 @@
 import { Compositor } from './Compositor'
 import { Entity } from './Entity'
 import { EntityCollider } from './EntityCollider'
+import { MusicController } from './MusicController'
 import { TileCollider } from './TileCollider'
 import { GameContext } from './types'
 
@@ -9,6 +10,7 @@ export class Level {
   entities = new Set<Entity>()
   entityCollider = new EntityCollider(this.entities)
   tileCollider = new TileCollider()
+  music = new MusicController()
 
   gravity = 1500
   totalTime = 0

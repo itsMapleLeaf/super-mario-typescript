@@ -1,6 +1,6 @@
 import { Entity, Trait } from '../Entity'
 import { Level } from '../Level'
-import { loadSpriteSheet } from '../loaders'
+import { loadSpriteSheet } from '../loaders/sprite'
 import { Gravity } from '../traits/Gravity'
 import { Killable } from '../traits/Killable'
 import { Stomper } from '../traits/Stomper'
