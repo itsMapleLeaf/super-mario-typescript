@@ -2,6 +2,8 @@ import { Entity, Trait } from '../Entity'
 import { Killable } from './Killable'
 
 export class Stomper extends Trait {
+  static EVENT_STOMP = Symbol('stomp')
+
   bounceSpeed = 400
 
   bounce(us: Entity, them: Entity) {
@@ -21,7 +23,7 @@ export class Stomper extends Trait {
       this.queue(() => this.bounce(us, them))
 
       us.sounds.add('stomp')
-      this.events.emit('stomp', us, them)
+      us.events.emit(Stomper.EVENT_STOMP, us, them)
     }
   }
 }
