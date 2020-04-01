@@ -91,8 +91,10 @@ class KoopaBehavior extends Trait {
   }
 
   panic(us: Entity, them: Entity) {
-    us.getTrait(PendulumMove)!.speed = this.panicSpeed * Math.sign(them.vel.x)
-    us.getTrait(PendulumMove)!.enabled = true
+    us.useTrait(PendulumMove, pm => {
+      pm.speed = this.panicSpeed * Math.sign(them.vel.x)
+      pm.enabled = true
+    })
     this.state = KoopaState.panic
   }
 

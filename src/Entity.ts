@@ -61,6 +61,14 @@ export class Entity {
     return undefined
   }
 
+  useTrait<T extends Trait>(
+    TraitClass: TraitConstructor<T>,
+    fn: (trait: T) => void,
+  ): void {
+    const trait = this.getTrait(TraitClass)
+    if (trait) fn(trait)
+  }
+
   update(gameContext: GameContext, level: Level) {
     this.traits.forEach(trait => {
       trait.update(this, gameContext, level)
