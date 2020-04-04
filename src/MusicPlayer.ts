@@ -9,7 +9,12 @@ export class MusicPlayer {
   }
 
   playTrack(name: string) {
+    for (const audio of this.tracks.values()) {
+      audio.pause()
+    }
+
     const audio = this.tracks.get(name)
     audio?.play()
+    return audio
   }
 }

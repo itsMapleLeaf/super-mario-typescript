@@ -1,4 +1,5 @@
 import { EntityFactoryDict } from '../entities'
+import { Entity } from '../Entity'
 import { createBackgroundLayer } from '../layers/background'
 import { createSpriteLayer } from '../layers/sprites'
 import { Level } from '../Level'
@@ -6,9 +7,29 @@ import { loadJSON } from '../loaders'
 import { Matrix } from '../math'
 import { SpriteSheet } from '../SpriteSheet'
 import { TileResolverMatrix } from '../TileResolver'
+import { LevelTimer } from '../traits/LevelTimer'
 import { loadMusicSheet } from './music'
 import { loadSpriteSheet } from './sprite'
 import { LevelSpec, LevelSpecPatterns, LevelSpecTile, TileRange } from './types'
+
+function createTimer() {
+  const timer = new Entity()
+  timer.addTrait(new LevelTimer())
+  return timer
+}
+
+function setupBehavior(level: Level) {
+  const timer = createTimer()
+  level.entities.add(timer)
+
+  level.events.listen(LevelTimer.EVENT_TIMER_OK, () => {
+    level.music.playTheme()
+  })
+
+  level.events.listen(LevelTimer.EVENT_TIMER_HURRY, () => {
+    level.music.playHurryTheme()
+  })
+}
 
 function setupBackground(
   levelSpec: LevelSpec,
@@ -57,6 +78,7 @@ export function createLevelLoader(entityFactory: EntityFactoryDict) {
 
     setupBackground(levelSpec, level, backgroundSprites)
     setupEntities(levelSpec, level, entityFactory)
+    setupBehavior(level)
     level.music.setPlayer(musicPlayer)
 
     return level

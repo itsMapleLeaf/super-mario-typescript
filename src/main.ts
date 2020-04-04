@@ -55,7 +55,6 @@ async function main(canvas: HTMLCanvasElement) {
   }
 
   timer.start()
-  level.music.player?.playTrack('main')
 }
 
 const canvas = document.getElementById('screen')
