@@ -8,6 +8,7 @@ import { loadFont } from './loaders/font'
 import { createLevelLoader } from './loaders/level'
 import { createPlayer, createPlayerEnv } from './player'
 import { Timer } from './Timer'
+import { Player } from './traits/Player'
 
 async function main(canvas: HTMLCanvasElement) {
   const context = canvas.getContext('2d')!
@@ -26,6 +27,9 @@ async function main(canvas: HTMLCanvasElement) {
   const camera = new Camera()
 
   const mario = createPlayer(entityFactory.mario!()) as Mario
+  mario.useTrait(Player, player => {
+    player.name = 'MARIO'
+  })
   mario.pos.set(64, 64)
   level.entities.add(mario)
 
@@ -40,7 +44,7 @@ async function main(canvas: HTMLCanvasElement) {
   const timer = new Timer()
 
   level.comp.layers.push(createCollisionLayer(level))
-  level.comp.layers.push(createDashboardLayer(font, playerEnv))
+  level.comp.layers.push(createDashboardLayer(font, level))
 
   timer.update = function update(deltaTime) {
     if (!document.hasFocus()) return
