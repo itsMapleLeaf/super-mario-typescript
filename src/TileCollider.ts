@@ -6,6 +6,7 @@ import {
   TileResolverMatrix,
 } from './TileResolver'
 import { brick } from './tiles/brick'
+import { coin } from './tiles/coin'
 import { ground } from './tiles/ground'
 import { Dict, GameContext } from './types'
 
@@ -23,6 +24,7 @@ export type TileColliderHandler = (context: TileColliderContext) => void
 const handlers: Dict<TileColliderHandler[]> = {
   ground,
   brick,
+  coin,
 }
 
 export class TileCollider {

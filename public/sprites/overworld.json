@@ -8,10 +8,12 @@
     { "name": "sky", "index": [3, 23] },
     { "name": "chocolate", "index": [0, 1] },
     { "name": "bricks", "index": [1, 0] },
-    { "name": "chance", "index": [24, 0] },
     { "name": "chance-1", "index": [24, 0] },
     { "name": "chance-2", "index": [25, 0] },
     { "name": "chance-3", "index": [26, 0] },
+    { "name": "coin-1", "index": [24, 1] },
+    { "name": "coin-2", "index": [25, 1] },
+    { "name": "coin-3", "index": [26, 1] },
     { "name": "pipe-insert-vert-left", "index": [0, 8] },
     { "name": "pipe-insert-vert-right", "index": [1, 8] },
     { "name": "pipe-vert-left", "index": [0, 9] },
@@ -32,6 +34,11 @@
       "name": "chance",
       "frameLength": 0.15,
       "frames": ["chance-1", "chance-1", "chance-2", "chance-3", "chance-2"]
+    },
+    {
+      "name": "coin",
+      "frameLength": 0.15,
+      "frames": ["coin-1", "coin-1", "coin-2", "coin-3", "coin-2"]
     }
   ]
 }
