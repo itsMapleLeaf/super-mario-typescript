@@ -1,4 +1,3 @@
-import { Camera } from './Camera'
 import { loadEntities } from './entities'
 import { Mario } from './entities/Mario'
 import { setupGamepad, setupKeyboard } from './input'
@@ -9,10 +8,11 @@ import { createLevelLoader } from './loaders/level'
 import { createPlayer, createPlayerEnv } from './player'
 import { Timer } from './Timer'
 import { Player } from './traits/Player'
+import { GameContext } from './types'
 
 async function main(canvas: HTMLCanvasElement) {
-  const context = canvas.getContext('2d')!
-  context.imageSmoothingEnabled = false
+  const videoContext = canvas.getContext('2d')!
+  videoContext.imageSmoothingEnabled = false
 
   const audioContext = new AudioContext()
 
@@ -22,12 +22,10 @@ async function main(canvas: HTMLCanvasElement) {
   ])
 
   const loadLevel = createLevelLoader(entityFactory)
-  const level = await loadLevel('debug-coin')
-
-  const camera = new Camera()
+  const level = await loadLevel('1-2')
 
   const mario = createPlayer(entityFactory.mario!()) as Mario
-  mario.useTrait(Player, player => {
+  mario.useTrait(Player, (player) => {
     player.name = 'MARIO'
   })
   mario.pos.set(64, 64)
@@ -49,13 +47,17 @@ async function main(canvas: HTMLCanvasElement) {
   timer.update = function update(deltaTime) {
     if (!document.hasFocus()) return
 
-    level.update({ deltaTime, audioContext, entityFactory })
+    const gameContext: GameContext = {
+      deltaTime,
+      audioContext,
+      entityFactory,
+      videoContext,
+    }
 
-    camera.pos.x = Math.max(0, mario.pos.x - 100)
-
+    level.update(gameContext)
     checkGamepadInput()
 
-    level.comp.draw(context, camera)
+    level.draw(gameContext)
   }
 
   timer.start()

@@ -24,7 +24,7 @@ export async function loadEntities(
     loadGoomba().then(addAs('goomba')),
     loadKoopa().then(addAs('koopa')),
     loadBullet().then(addAs('bullet')),
-    loadCannon(audioContext, factories).then(addAs('cannon')),
+    loadCannon(audioContext).then(addAs('cannon')),
   ])
 
   return factories

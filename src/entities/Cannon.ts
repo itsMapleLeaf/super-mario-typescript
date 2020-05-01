@@ -1,22 +1,19 @@
-import { EntityFactoryDict } from '../entities'
 import { Entity } from '../Entity'
 import { Level } from '../Level'
 import { loadAudioBoard } from '../loaders/audio'
 import { findPlayers } from '../player'
 import { Emitter } from '../traits/Emitter'
+import { GameContext } from '../types'
 
 const HOLD_FIRE_THRESHOLD = 30
 
-export async function loadCannon(
-  audioContext: AudioContext,
-  entityFactory: EntityFactoryDict,
-) {
+export async function loadCannon(audioContext: AudioContext) {
   const audio = await loadAudioBoard('cannon', audioContext)
 
   const getDiffX = (e1: Entity, e2: Entity) => Math.abs(e1.pos.x - e2.pos.x)
 
-  function emitBullet(cannon: Entity, level: Level) {
-    const bullet = entityFactory.bullet?.()
+  function emitBullet(cannon: Entity, gameContext: GameContext, level: Level) {
+    const bullet = gameContext.entityFactory.bullet?.()
     if (!bullet) return
 
     const players = [...findPlayers(level)]

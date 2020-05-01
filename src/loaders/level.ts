@@ -18,6 +18,10 @@ function createTimer() {
   return timer
 }
 
+function loadPattern(name: string) {
+  return loadJSON<LevelSpecPatterns>(`/sprites/patterns/${name}.json`)
+}
+
 function setupBehavior(level: Level) {
   const timer = createTimer()
   level.entities.add(timer)
@@ -35,9 +39,10 @@ function setupBackground(
   levelSpec: LevelSpec,
   level: Level,
   backgroundSprites: SpriteSheet,
+  patterns: LevelSpecPatterns,
 ) {
   for (const layer of levelSpec.layers) {
-    const grid = createGrid(layer.tiles, levelSpec.patterns)
+    const grid = createGrid(layer.tiles, patterns)
     const backgroundLayer = createBackgroundLayer(
       level,
       grid,
@@ -71,12 +76,16 @@ function setupEntities(
 export function createLevelLoader(entityFactory: EntityFactoryDict) {
   return async function loadLevel(name: string) {
     const levelSpec = await loadJSON<LevelSpec>(`levels/${name}.json`)
-    const backgroundSprites = await loadSpriteSheet(levelSpec.spriteSheet)
-    const musicPlayer = await loadMusicSheet(levelSpec.musicSheet)
+
+    const [backgroundSprites, musicPlayer, patterns] = await Promise.all([
+      loadSpriteSheet(levelSpec.spriteSheet),
+      loadMusicSheet(levelSpec.musicSheet),
+      loadPattern(levelSpec.patternSheet),
+    ])
 
     const level = new Level()
 
-    setupBackground(levelSpec, level, backgroundSprites)
+    setupBackground(levelSpec, level, backgroundSprites, patterns)
     setupEntities(levelSpec, level, entityFactory)
     setupBehavior(level)
     level.music.setPlayer(musicPlayer)
