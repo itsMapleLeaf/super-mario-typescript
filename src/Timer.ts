@@ -1,6 +1,6 @@
 export class Timer {
   private accumulatedTime = 0
-  private lastTime = 0
+  private lastTime?: number
 
   constructor(private deltaTime = 1 / 60) {}
 
@@ -15,16 +15,17 @@ export class Timer {
   }
 
   private updateProxy = (time: number) => {
-    this.accumulatedTime += (time - this.lastTime) / 1000
-    this.accumulatedTime = Math.min(this.accumulatedTime, 1)
+    if (this.lastTime != null) {
+      this.accumulatedTime += (time - this.lastTime) / 1000
+      this.accumulatedTime = Math.min(this.accumulatedTime, 1)
 
-    while (this.accumulatedTime > this.deltaTime) {
-      this.update(this.deltaTime)
-      this.accumulatedTime -= this.deltaTime
+      while (this.accumulatedTime > this.deltaTime) {
+        this.update(this.deltaTime)
+        this.accumulatedTime -= this.deltaTime
+      }
     }
 
-    this.enqueue()
-
     this.lastTime = time
+    this.enqueue()
   }
 }
