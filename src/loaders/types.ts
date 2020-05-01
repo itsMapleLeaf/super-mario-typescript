@@ -1,6 +1,7 @@
 export type LevelSpec = {
   spriteSheet: string
   musicSheet: string
+  patternSheet: string
   patterns: LevelSpecPatterns
   layers: LevelSpecLayer[]
   entities: LevelSpecEntity[]

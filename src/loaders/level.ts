@@ -84,11 +84,12 @@ export function createLevelLoader(entityFactory: EntityFactoryDict) {
     ])
 
     const level = new Level()
+    level.name = name
+    level.music.setPlayer(musicPlayer)
 
     setupBackground(levelSpec, level, backgroundSprites, patterns)
     setupEntities(levelSpec, level, entityFactory)
     setupBehavior(level)
-    level.music.setPlayer(musicPlayer)
 
     return level
   }

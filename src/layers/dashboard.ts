@@ -39,7 +39,7 @@ export function createDashboardLayer(font: Font, level: Level) {
     )
 
     font.print('WORLD', context, 152, line1)
-    font.print('1-1', context, 160, line2)
+    font.print(level.name, context, 160, line2)
 
     font.print('TIME', context, 208, line1)
     font.print(

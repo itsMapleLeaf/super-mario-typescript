@@ -9,6 +9,8 @@ import { TileCollider } from './TileCollider'
 import { GameContext } from './types'
 
 export class Level {
+  name = ''
+
   comp = new Compositor()
   entities = new Set<Entity>()
   entityCollider = new EntityCollider(this.entities)
