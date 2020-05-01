@@ -34,8 +34,8 @@ async function main(canvas: HTMLCanvasElement) {
   const playerEnv = createPlayerEnv(mario)
   level.entities.add(playerEnv)
 
-  const input = setupKeyboard(mario)
-  input.listenTo(window)
+  const router = setupKeyboard(window)
+  router.addReceiver(mario)
 
   const checkGamepadInput = setupGamepad(mario)
 

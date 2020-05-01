@@ -1,35 +1,39 @@
 import { Mario } from './entities/Mario'
+import { InputRouter } from './InputRouter'
 import { Keyboard } from './Keyboard'
 
-export function setupKeyboard(mario: Mario) {
+export function setupKeyboard(target: EventTarget) {
   const input = new Keyboard()
+  const router = new InputRouter<Mario>()
 
   let leftState = 0
   let rightState = 0
 
-  input.addListener('ArrowRight', keyState => {
+  input.listenTo(target)
+
+  input.addListener('ArrowRight', (keyState) => {
     rightState = keyState
-    mario.go.dir = rightState - leftState
+    router.route((entity) => (entity.go.dir = rightState - leftState))
   })
 
-  input.addListener('ArrowLeft', keyState => {
+  input.addListener('ArrowLeft', (keyState) => {
     leftState = keyState
-    mario.go.dir = rightState - leftState
+    router.route((entity) => (entity.go.dir = rightState - leftState))
   })
 
-  input.addListener('KeyZ', pressed => {
+  input.addListener('KeyZ', (pressed) => {
     if (pressed) {
-      mario.jump.start()
+      router.route((entity) => entity.jump.start())
     } else {
-      mario.jump.cancel()
+      router.route((entity) => entity.jump.cancel())
     }
   })
 
-  input.addListener('KeyX', keyState => {
-    mario.setTurboState(keyState === 1)
+  input.addListener('KeyX', (keyState) => {
+    router.route((entity) => entity.setTurboState(keyState === 1))
   })
 
-  return input
+  return router
 }
 
 export function setupGamepad(mario: Mario) {
