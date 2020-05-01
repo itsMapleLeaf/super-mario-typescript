@@ -1,4 +1,4 @@
-import { Trait } from '../Entity'
+import { Entity, Trait } from '../Entity'
 import { Stomper } from './Stomper'
 
 const COIN_LIFE_THRESHOLD = 100
@@ -19,13 +19,12 @@ export class Player extends Trait {
 
   addCoins(count: number) {
     this.coins += count
-    if (this.coins >= COIN_LIFE_THRESHOLD) {
-      const lifeCount = Math.floor(this.coins / COIN_LIFE_THRESHOLD)
-      this.addLives(lifeCount)
-      this.coins = this.coins % COIN_LIFE_THRESHOLD
+    while (this.coins >= COIN_LIFE_THRESHOLD) {
+      this.addLives(1)
+      this.coins -= COIN_LIFE_THRESHOLD
     }
 
-    this.queue(entity => entity.sounds.add('coin'))
+    this.queue((entity: Entity) => entity.sounds.add('coin'))
   }
 
   addLives(count: number) {

@@ -13,7 +13,7 @@ export enum Side {
   right,
 }
 
-type TraitTask = () => void
+type TraitTask = (...args: any[]) => void
 
 type TraitListener = {
   name: string | symbol
@@ -44,7 +44,7 @@ export abstract class Trait {
       listener.count -= 1
     }
 
-    this.listeners = this.listeners.filter(listener => listener.count > 0)
+    this.listeners = this.listeners.filter((listener) => listener.count > 0)
   }
 
   update(entity: Entity, gameContext: GameContext, level: Level) {}
@@ -90,7 +90,7 @@ export class Entity {
   }
 
   update(gameContext: GameContext, level: Level) {
-    this.traits.forEach(trait => {
+    this.traits.forEach((trait) => {
       trait.update(this, gameContext, level)
     })
 
@@ -104,7 +104,7 @@ export class Entity {
   finalize() {
     this.events.emit(Trait.EVENT_TASK, this)
 
-    this.traits.forEach(trait => {
+    this.traits.forEach((trait) => {
       trait.finalize(this)
     })
 
@@ -112,19 +112,19 @@ export class Entity {
   }
 
   obstruct(side: Side, match: TileResolverMatch) {
-    this.traits.forEach(trait => {
+    this.traits.forEach((trait) => {
       trait.obstruct(this, side, match)
     })
   }
 
   collides(candidate: Entity) {
-    this.traits.forEach(trait => {
+    this.traits.forEach((trait) => {
       trait.collides(this, candidate)
     })
   }
 
   private playSounds(audioBoard: AudioBoard, audioContext: AudioContext) {
-    this.sounds.forEach(name => audioBoard.play(name, audioContext))
+    this.sounds.forEach((name) => audioBoard.play(name, audioContext))
     this.sounds.clear()
   }
 }
