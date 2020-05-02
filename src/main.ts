@@ -1,11 +1,12 @@
 import { loadEntities } from './entities'
 import { Mario } from './entities/Mario'
-import { setupGamepad, setupKeyboard } from './input'
+import { setupKeyboard } from './input'
 import { createCollisionLayer } from './layers/collision'
 import { createDashboardLayer } from './layers/dashboard'
 import { loadFont } from './loaders/font'
 import { createLevelLoader } from './loaders/level'
 import { createPlayer, createPlayerEnv } from './player'
+import { SceneRunner } from './SceneRunner'
 import { Timer } from './Timer'
 import { Player } from './traits/Player'
 import { GameContext } from './types'
@@ -24,6 +25,9 @@ async function main(canvas: HTMLCanvasElement) {
   const loadLevel = createLevelLoader(entityFactory)
   const level = await loadLevel('1-2')
 
+  const sceneRunner = new SceneRunner()
+  sceneRunner.addScene(level)
+
   const mario = createPlayer(entityFactory.mario!()) as Mario
   mario.useTrait(Player, (player) => {
     player.name = 'MARIO'
@@ -36,8 +40,6 @@ async function main(canvas: HTMLCanvasElement) {
 
   const router = setupKeyboard(window)
   router.addReceiver(mario)
-
-  const checkGamepadInput = setupGamepad(mario)
 
   const timer = new Timer()
 
@@ -54,13 +56,11 @@ async function main(canvas: HTMLCanvasElement) {
       videoContext,
     }
 
-    level.update(gameContext)
-    checkGamepadInput()
-
-    level.draw(gameContext)
+    sceneRunner.update(gameContext)
   }
 
   timer.start()
+  sceneRunner.runNext()
 }
 
 const canvas = document.getElementById('screen')
