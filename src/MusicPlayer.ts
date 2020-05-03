@@ -9,12 +9,16 @@ export class MusicPlayer {
   }
 
   playTrack(name: string) {
-    for (const audio of this.tracks.values()) {
-      audio.pause()
-    }
+    this.pauseAll()
 
     const audio = this.tracks.get(name)
     audio?.play()
     return audio
+  }
+
+  pauseAll() {
+    for (const audio of this.tracks.values()) {
+      audio.pause()
+    }
   }
 }

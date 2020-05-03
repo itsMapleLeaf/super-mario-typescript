@@ -1,11 +1,11 @@
 import { Entity, Trait } from '../Entity'
+import { GameContext } from '../GameContext'
 import { Level } from '../Level'
 import { loadSpriteSheet } from '../loaders/sprite'
 import { Gravity } from '../traits/Gravity'
 import { Killable } from '../traits/Killable'
 import { Stomper } from '../traits/Stomper'
 import { Velocity } from '../traits/Velocity'
-import { GameContext } from '../types'
 
 class BulletBehavior extends Trait {
   gravity = new Gravity()
@@ -46,7 +46,7 @@ export async function loadBullet() {
     bullet.addTrait(new Killable())
     bullet.addTrait(new Velocity())
 
-    bullet.draw = context => {
+    bullet.draw = (context) => {
       sprites.draw('bullet', context, 0, 0, bullet.vel.x < 0)
     }
 

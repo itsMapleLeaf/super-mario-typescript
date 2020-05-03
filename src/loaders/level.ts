@@ -8,6 +8,7 @@ import { Matrix } from '../math'
 import { SpriteSheet } from '../SpriteSheet'
 import { TileResolverMatrix } from '../TileResolver'
 import { LevelTimer } from '../traits/LevelTimer'
+import { Trigger } from '../traits/Trigger'
 import { loadMusicSheet } from './music'
 import { loadSpriteSheet } from './sprite'
 import { LevelSpec, LevelSpecPatterns, LevelSpecTile, TileRange } from './types'
@@ -16,6 +17,12 @@ function createTimer() {
   const timer = new Entity()
   timer.addTrait(new LevelTimer())
   return timer
+}
+
+function createTrigger() {
+  const entity = new Entity()
+  entity.addTrait(new Trigger())
+  return entity
 }
 
 function loadPattern(name: string) {
@@ -73,6 +80,24 @@ function setupEntities(
   level.comp.layers.push(spriteLayer)
 }
 
+export function setupTriggers(levelSpec: LevelSpec, level: Level) {
+  if (!levelSpec.triggers) return
+
+  for (const triggerSpec of levelSpec.triggers) {
+    const entity = createTrigger()
+
+    entity.useTrait(Trigger, (trigger) => {
+      trigger.conditions.push((entity, touches, gc, level) => {
+        level.events.emit(Level.EVENT_TRIGGER, triggerSpec, entity, touches)
+      })
+    })
+    entity.pos.set(...triggerSpec.pos)
+    entity.size.set(64, 64)
+
+    level.entities.add(entity)
+  }
+}
+
 export function createLevelLoader(entityFactory: EntityFactoryDict) {
   return async function loadLevel(name: string) {
     const levelSpec = await loadJSON<LevelSpec>(`levels/${name}.json`)
@@ -89,6 +114,7 @@ export function createLevelLoader(entityFactory: EntityFactoryDict) {
 
     setupBackground(levelSpec, level, backgroundSprites, patterns)
     setupEntities(levelSpec, level, entityFactory)
+    setupTriggers(levelSpec, level)
     setupBehavior(level)
 
     return level

@@ -21,4 +21,8 @@ export class MusicController {
       audio.addEventListener('ended', () => this.playTheme(1.3), { once: true })
     }
   }
+
+  pause() {
+    this.player?.pauseAll()
+  }
 }

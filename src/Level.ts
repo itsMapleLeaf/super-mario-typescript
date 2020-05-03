@@ -1,22 +1,21 @@
 import { Camera } from './Camera'
-import { Compositor } from './Compositor'
 import { Entity } from './Entity'
 import { EntityCollider } from './EntityCollider'
-import { EventEmitter } from './EventEmitter'
+import { GameContext } from './GameContext'
 import { MusicController } from './MusicController'
 import { findPlayers } from './player'
+import { Scene } from './Scene'
 import { TileCollider } from './TileCollider'
-import { GameContext } from './types'
 
-export class Level {
+export class Level extends Scene {
+  static EVENT_TRIGGER = Symbol('trigger')
+
   name = ''
 
-  comp = new Compositor()
   entities = new Set<Entity>()
   entityCollider = new EntityCollider(this.entities)
   tileCollider = new TileCollider()
   music = new MusicController()
-  events = new EventEmitter()
   camera = new Camera()
 
   gravity = 1500
@@ -42,6 +41,10 @@ export class Level {
 
   draw(gameContext: GameContext) {
     this.comp.draw(gameContext.videoContext, this.camera)
+  }
+
+  pause() {
+    this.music.pause()
   }
 }
 

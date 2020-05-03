@@ -5,6 +5,7 @@ export type LevelSpec = {
   patterns: LevelSpecPatterns
   layers: LevelSpecLayer[]
   entities: LevelSpecEntity[]
+  triggers?: LevelSpecTrigger[]
 }
 
 export type LevelSpecLayer = {
@@ -27,6 +28,12 @@ export type LevelSpecTile = {
   name?: string
   pattern?: string
   ranges: TileRange[]
+}
+
+export type LevelSpecTrigger = {
+  type: string
+  name: string
+  pos: [number, number]
 }
 
 export type TileRange = number[]

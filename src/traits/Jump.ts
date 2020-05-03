@@ -1,5 +1,5 @@
 import { Entity, Side, Trait } from '../Entity'
-import { GameContext } from '../types'
+import { GameContext } from '../GameContext'
 
 export class Jump extends Trait {
   duration = 0.3

@@ -1,9 +1,9 @@
 import { Entity } from '../Entity'
+import { GameContext } from '../GameContext'
 import { Level } from '../Level'
 import { loadAudioBoard } from '../loaders/audio'
 import { findPlayers } from '../player'
 import { Emitter } from '../traits/Emitter'
-import { GameContext } from '../types'
 
 const HOLD_FIRE_THRESHOLD = 30
 
@@ -18,7 +18,7 @@ export async function loadCannon(audioContext: AudioContext) {
 
     const players = [...findPlayers(level)]
 
-    const shouldHoldFire = players.some(player => {
+    const shouldHoldFire = players.some((player) => {
       return getDiffX(player, cannon) <= HOLD_FIRE_THRESHOLD
     })
     if (shouldHoldFire) return

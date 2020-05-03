@@ -1,4 +1,5 @@
 import { Entity, Trait } from '../Entity'
+import { GameContext } from '../GameContext'
 import { loadSpriteSheet } from '../loaders/sprite'
 import { SpriteSheet } from '../SpriteSheet'
 import { Killable } from '../traits/Killable'
@@ -6,7 +7,6 @@ import { PendulumMove } from '../traits/PendulumMove'
 import { Physics } from '../traits/Physics'
 import { Solid } from '../traits/Solid'
 import { Stomper } from '../traits/Stomper'
-import { GameContext } from '../types'
 
 enum KoopaState {
   walking,
@@ -91,7 +91,7 @@ class KoopaBehavior extends Trait {
   }
 
   panic(us: Entity, them: Entity) {
-    us.useTrait(PendulumMove, pm => {
+    us.useTrait(PendulumMove, (pm) => {
       pm.speed = this.panicSpeed * Math.sign(them.vel.x)
       pm.enabled = true
     })

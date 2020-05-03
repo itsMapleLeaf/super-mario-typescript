@@ -1,5 +1,5 @@
 import { Entity, Trait } from '../Entity'
-import { GameContext } from '../types'
+import { GameContext } from '../GameContext'
 import { Jump } from './Jump'
 
 export class Go extends Trait {

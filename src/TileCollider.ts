@@ -1,4 +1,5 @@
 import { Entity } from './Entity'
+import { GameContext } from './GameContext'
 import { Level } from './Level'
 import {
   TileResolver,
@@ -8,7 +9,7 @@ import {
 import { brick } from './tiles/brick'
 import { coin } from './tiles/coin'
 import { ground } from './tiles/ground'
-import { Dict, GameContext } from './types'
+import { Dict } from './types'
 
 export type TileColliderContext = {
   entity: Entity

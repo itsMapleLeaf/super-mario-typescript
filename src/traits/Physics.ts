@@ -1,6 +1,6 @@
 import { Entity, Trait } from '../Entity'
+import { GameContext } from '../GameContext'
 import { Level } from '../Level'
-import { GameContext } from '../types'
 
 export class Physics extends Trait {
   update(entity: Entity, gameContext: GameContext, level: Level) {

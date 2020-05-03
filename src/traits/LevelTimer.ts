@@ -1,6 +1,6 @@
 import { Entity, Trait } from '../Entity'
+import { GameContext } from '../GameContext'
 import { Level } from '../Level'
-import { GameContext } from '../types'
 
 export class LevelTimer extends Trait {
   static EVENT_TIMER_HURRY = Symbol('timer hurry')

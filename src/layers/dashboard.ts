@@ -24,10 +24,11 @@ export function createDashboardLayer(font: Font, level: Level) {
   const line1 = font.size
   const line2 = font.size * 2
 
-  const playerTrait = getPlayerTrait(level)
   const timerTrait = getTimerTrait(level)
 
   return function drawDashboard(context: CanvasRenderingContext2D) {
+    const playerTrait = getPlayerTrait(level)
+
     font.print(playerTrait.name, context, 16, line1)
     font.print(String(playerTrait.score).padStart(6, '0'), context, 16, line2)
 
@@ -38,7 +39,7 @@ export function createDashboardLayer(font: Font, level: Level) {
       line2,
     )
 
-    font.print('WORLD', context, 152, line1)
+    font.print(`WORLD`, context, 152, line1)
     font.print(level.name, context, 160, line2)
 
     font.print('TIME', context, 208, line1)
