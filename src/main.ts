@@ -43,18 +43,13 @@ async function main(canvas: HTMLCanvasElement) {
   async function runLevel(name: string) {
     const level = await loadLevel(name)
 
-    let nextLevelTriggerReached = false
-
     level.events.listen(
       Level.EVENT_TRIGGER,
       (spec: LevelSpecTrigger, trigger: Entity, touches: Set<Entity>) => {
-        if (nextLevelTriggerReached) return
-
         if (spec.type === 'goto') {
           for (const entity of touches) {
             if (entity.getTrait(Player)) {
               runLevel(spec.name)
-              nextLevelTriggerReached = true
               return
             }
           }
