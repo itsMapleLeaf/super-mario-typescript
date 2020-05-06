@@ -14,7 +14,7 @@ export enum Side {
   right,
 }
 
-type TraitConstructor<T extends Trait> = new (...args: any[]) => T
+type TraitConstructor<T extends Trait> = new (...args: unknown[]) => T
 
 export class Entity {
   // audio = new AudioBoard()
@@ -24,23 +24,21 @@ export class Entity {
   size = new Vec2()
   offset = new Vec2()
   bounds = new BoundingBox(this.pos, this.size, this.offset)
-  traits = [] as Trait[]
+  traits = new Map<Function, Trait>()
   lifetime = 0
   sounds = new Set<string>()
   events = new EventBuffer()
 
-  addTrait<T extends Trait>(trait: T): T {
-    this.traits.push(trait)
+  addTrait<T extends Trait>(trait: T) {
+    this.traits.set(trait.constructor, trait)
     return trait
   }
 
   getTrait<T extends Trait>(TraitClass: TraitConstructor<T>): T | undefined {
-    for (const trait of this.traits) {
-      if (trait instanceof TraitClass) {
-        return trait
-      }
+    const trait = this.traits.get(TraitClass)
+    if (trait instanceof TraitClass) {
+      return trait
     }
-    return undefined
   }
 
   useTrait<T extends Trait>(

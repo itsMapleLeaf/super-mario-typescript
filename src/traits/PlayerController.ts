@@ -14,7 +14,7 @@ export class PlayerController extends Trait {
 
   update(_: Entity, __: GameContext, level: Level) {
     if (!level.entities.has(this.player)) {
-      this.player.getTrait(Killable)!.revive()
+      this.player.getTrait(Killable)?.revive()
       this.player.pos.set(this.checkpoint.x, this.checkpoint.y)
       level.entities.add(this.player)
     }

@@ -1,5 +1,4 @@
 import { Entity } from './Entity'
-import { Level } from './Level'
 import { Player } from './traits/Player'
 import { PlayerController } from './traits/PlayerController'
 
@@ -11,13 +10,14 @@ export function createPlayerEnv(playerEntity: Entity) {
   return playerEnv
 }
 
-export function* findPlayers(level: Level) {
-  for (const entity of level.entities) {
+export function* findPlayers(entities: Iterable<Entity>) {
+  for (const entity of entities) {
     if (entity.getTrait(Player)) yield entity
   }
 }
 
-export function createPlayer(entity: Entity) {
-  entity.addTrait(new Player())
-  return entity
+export function makePlayer(entity: Entity, name: string) {
+  const player = new Player()
+  player.name = name
+  entity.addTrait(player)
 }

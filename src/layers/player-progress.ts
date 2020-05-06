@@ -5,7 +5,7 @@ import { raise } from '../raise'
 import { Player } from '../traits/Player'
 
 function getPlayer(level: Level) {
-  for (const entity of findPlayers(level)) {
+  for (const entity of findPlayers(level.entities)) {
     if (entity.getTrait(Player)) return entity
   }
   throw new Error('player not found')

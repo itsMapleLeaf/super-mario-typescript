@@ -5,7 +5,7 @@ import { LevelTimer } from '../traits/LevelTimer'
 import { Player } from '../traits/Player'
 
 function getPlayerTrait(level: Level) {
-  for (const entity of findPlayers(level)) {
+  for (const entity of findPlayers(level.entities)) {
     const trait = entity.getTrait(Player)
     if (trait) return trait
   }

@@ -11,20 +11,17 @@ import { Stomper } from '../traits/Stomper'
 
 class GoombaBehavior extends Trait {
   collides(us: Entity, them: Entity) {
-    if (us.getTrait(Killable)!.dead) {
+    if (us.getTrait(Killable)?.dead) {
       return
     }
 
     const stomper = them.getTrait(Stomper)
     if (stomper) {
       if (them.vel.y > us.vel.y) {
-        us.getTrait(PendulumMove)!.speed = 0
-        us.getTrait(Killable)!.kill()
+        us.useTrait(PendulumMove, (pm) => (pm.speed = 0))
+        us.useTrait(Killable, (k) => k.kill())
       } else {
-        const killable = them.getTrait(Killable)
-        if (killable) {
-          killable.kill()
-        }
+        them.getTrait(Killable)?.kill()
       }
     }
   }

@@ -49,7 +49,7 @@ export class Level extends Scene {
 }
 
 function focusPlayer(level: Level) {
-  for (const player of findPlayers(level)) {
+  for (const player of findPlayers(level.entities)) {
     level.camera.pos.x = Math.max(0, player.pos.x - 100)
   }
 }

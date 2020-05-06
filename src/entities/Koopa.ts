@@ -23,7 +23,7 @@ class KoopaBehavior extends Trait {
   walkSpeed?: number
 
   collides(us: Entity, them: Entity) {
-    if (us.getTrait(Killable)!.dead) {
+    if (us.getTrait(Killable)?.dead) {
       return
     }
 
@@ -41,9 +41,9 @@ class KoopaBehavior extends Trait {
     if (this.state === KoopaState.walking) {
       this.hide(us)
     } else if (this.state === KoopaState.hiding) {
-      us.getTrait(Killable)!.kill()
+      us.useTrait(Killable, (it) => it.kill())
       us.vel.set(100, -200)
-      us.getTrait(Solid)!.obstructs = false
+      us.useTrait(Solid, (s) => (s.obstructs = false))
     } else if (this.state === KoopaState.panic) {
       this.hide(us)
     }
@@ -71,24 +71,25 @@ class KoopaBehavior extends Trait {
   }
 
   hide(us: Entity) {
-    const walk = us.getTrait(PendulumMove)!
+    us.useTrait(PendulumMove, (walk) => {
+      us.vel.x = 0
+      walk.enabled = false
 
-    us.vel.x = 0
-    walk.enabled = false
+      if (!this.walkSpeed) {
+        this.walkSpeed = walk.speed
+      }
 
-    if (!this.walkSpeed) {
-      this.walkSpeed = walk.speed
-    }
-
-    this.state = KoopaState.hiding
-    this.hideTime = 0
+      this.state = KoopaState.hiding
+      this.hideTime = 0
+    })
   }
 
   unhide(us: Entity) {
-    const walk = us.getTrait(PendulumMove)!
-    walk.enabled = true
-    if (this.walkSpeed != null) walk.speed = this.walkSpeed
-    this.state = KoopaState.walking
+    us.useTrait(PendulumMove, (walk) => {
+      walk.enabled = true
+      if (this.walkSpeed != null) walk.speed = this.walkSpeed
+      this.state = KoopaState.walking
+    })
   }
 
   panic(us: Entity, them: Entity) {

@@ -1,5 +1,4 @@
 import { loadEntities } from './entities'
-import { Mario } from './entities/Mario'
 import { Entity } from './Entity'
 import { GameContext } from './GameContext'
 import { setupKeyboard } from './input'
@@ -12,7 +11,7 @@ import { Level } from './Level'
 import { loadFont } from './loaders/font'
 import { createLevelLoader } from './loaders/level'
 import { LevelSpecTrigger } from './loaders/types'
-import { createPlayer, createPlayerEnv } from './player'
+import { createPlayerEnv, makePlayer } from './player'
 import { raise } from './raise'
 import { Scene } from './Scene'
 import { SceneRunner } from './SceneRunner'
@@ -37,10 +36,8 @@ async function main(canvas: HTMLCanvasElement) {
 
   const sceneRunner = new SceneRunner()
 
-  const mario = createPlayer(entityFactory.mario!()) as Mario
-  mario.useTrait(Player, (player) => {
-    player.name = 'MARIO'
-  })
+  const mario = entityFactory.mario?.() || raise('where mario tho')
+  makePlayer(mario, 'MARIO')
 
   const inputRouter = setupKeyboard(window)
   inputRouter.addReceiver(mario)

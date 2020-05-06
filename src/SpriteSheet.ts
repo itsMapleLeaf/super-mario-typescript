@@ -1,4 +1,5 @@
 import { Animation } from './animation'
+import { raise } from './raise'
 
 export class SpriteSheet {
   tiles = new Map<string, HTMLCanvasElement[]>()
@@ -11,12 +12,12 @@ export class SpriteSheet {
   ) {}
 
   define(name: string, x: number, y: number, width: number, height: number) {
-    const buffers = [false, true].map(flipped => {
+    const buffers = [false, true].map((flipped) => {
       const buffer = document.createElement('canvas')
       buffer.width = width
       buffer.height = height
 
-      const context = buffer.getContext('2d')!
+      const context = buffer.getContext('2d') || raise('Canvas not supported')
 
       if (flipped) {
         context.scale(-1, 1)

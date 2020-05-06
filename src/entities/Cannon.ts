@@ -16,7 +16,7 @@ export async function loadCannon(audioContext: AudioContext) {
     const bullet = gameContext.entityFactory.bullet?.()
     if (!bullet) return
 
-    const players = [...findPlayers(level)]
+    const players = [...findPlayers(level.entities)]
 
     const shouldHoldFire = players.some((player) => {
       return getDiffX(player, cannon) <= HOLD_FIRE_THRESHOLD
@@ -43,9 +43,11 @@ export async function loadCannon(audioContext: AudioContext) {
     const cannon = new Entity()
     cannon.audio = audio
 
-    const emitter = cannon.addTrait(new Emitter())
+    const emitter = new Emitter()
     emitter.interval = 4
     emitter.emitters.push(emitBullet)
+
+    cannon.addTrait(emitter)
 
     return cannon
   }
