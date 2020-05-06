@@ -1,4 +1,5 @@
-import { Entity, Trait } from '../Entity'
+import { Entity } from '../Entity'
+import { Trait } from '../Trait'
 import { Killable } from './Killable'
 
 export class Stomper extends Trait {

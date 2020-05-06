@@ -1,7 +1,8 @@
-import { Entity, Trait } from '../Entity'
+import { Entity } from '../Entity'
 import { GameContext } from '../GameContext'
 import { Level } from '../Level'
 import { Vec2 } from '../math'
+import { Trait } from '../Trait'
 import { Killable } from './Killable'
 
 export class PlayerController extends Trait {

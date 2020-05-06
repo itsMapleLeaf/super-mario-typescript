@@ -1,6 +1,7 @@
-import { Entity, Trait } from '../Entity'
+import { Entity } from '../Entity'
 import { GameContext } from '../GameContext'
 import { Level } from '../Level'
+import { Trait } from '../Trait'
 
 export class Killable extends Trait {
   dead = false

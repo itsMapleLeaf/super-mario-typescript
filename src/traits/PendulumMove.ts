@@ -1,4 +1,5 @@
-import { Entity, Side, Trait } from '../Entity'
+import { Entity, Side } from '../Entity'
+import { Trait } from '../Trait'
 
 export class PendulumMove extends Trait {
   speed = -30

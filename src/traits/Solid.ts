@@ -1,5 +1,6 @@
-import { Entity, Side, Trait } from '../Entity'
+import { Entity, Side } from '../Entity'
 import { TileResolverMatch } from '../TileResolver'
+import { Trait } from '../Trait'
 
 export class Solid extends Trait {
   obstructs = true

@@ -1,4 +1,5 @@
-import { Entity, Trait } from '../Entity'
+import { Entity } from '../Entity'
+import { Trait } from '../Trait'
 import { Stomper } from './Stomper'
 
 const COIN_LIFE_THRESHOLD = 100
