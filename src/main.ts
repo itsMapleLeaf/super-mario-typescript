@@ -1,4 +1,3 @@
-import { CompositionScene } from './CompositionScene'
 import { loadEntities } from './entities'
 import { Mario } from './entities/Mario'
 import { Entity } from './Entity'
@@ -8,17 +7,23 @@ import { createCollisionLayer } from './layers/collision'
 import { createColorLayer } from './layers/color'
 import { createDashboardLayer } from './layers/dashboard'
 import { createPlayerProgressLayer } from './layers/player-progress'
+import { createTextLayer } from './layers/text'
 import { Level } from './Level'
 import { loadFont } from './loaders/font'
 import { createLevelLoader } from './loaders/level'
 import { LevelSpecTrigger } from './loaders/types'
 import { createPlayer, createPlayerEnv } from './player'
+import { raise } from './raise'
+import { Scene } from './Scene'
 import { SceneRunner } from './SceneRunner'
+import { TimedScene } from './TimedScene'
 import { Timer } from './Timer'
 import { Player } from './traits/Player'
 
 async function main(canvas: HTMLCanvasElement) {
-  const videoContext = canvas.getContext('2d')!
+  const videoContext = canvas.getContext('2d') || raise('Canvas not supported')
+
+  // turning this off lets us save a lot of Math.floor calls when rendering
   videoContext.imageSmoothingEnabled = false
 
   const audioContext = new AudioContext()
@@ -41,6 +46,14 @@ async function main(canvas: HTMLCanvasElement) {
   inputRouter.addReceiver(mario)
 
   async function runLevel(name: string) {
+    const loadScreen = new Scene()
+    loadScreen.comp.layers.push(createColorLayer('black'))
+    loadScreen.comp.layers.push(createTextLayer(font, `LOADING ${name}...`))
+    sceneRunner.addScene(loadScreen)
+    sceneRunner.runNext()
+
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     const level = await loadLevel(name)
 
     level.events.listen(
@@ -67,7 +80,7 @@ async function main(canvas: HTMLCanvasElement) {
     const playerEnv = createPlayerEnv(mario)
     level.entities.add(playerEnv)
 
-    const waitScreen = new CompositionScene()
+    const waitScreen = new TimedScene()
     waitScreen.comp.layers.push(createColorLayer('black'))
     waitScreen.comp.layers.push(dashboardLayer)
     waitScreen.comp.layers.push(playerProgressLayer)

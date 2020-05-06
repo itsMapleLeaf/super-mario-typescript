@@ -1,5 +1,6 @@
 import { Camera } from '../Camera'
 import { Entity } from '../Entity'
+import { raise } from '../raise'
 
 export function createSpriteLayer(
   entities: Set<Entity>,
@@ -10,13 +11,14 @@ export function createSpriteLayer(
   spriteBuffer.width = width
   spriteBuffer.height = height
 
-  const spriteBufferContext = spriteBuffer.getContext('2d')!
+  const spriteBufferContext =
+    spriteBuffer.getContext('2d') || raise('Canvas not supported')
 
   return function drawSpriteLayer(
     context: CanvasRenderingContext2D,
     camera: Camera,
   ) {
-    entities.forEach(entity => {
+    entities.forEach((entity) => {
       spriteBufferContext.clearRect(0, 0, width, height)
 
       entity.draw(spriteBufferContext)

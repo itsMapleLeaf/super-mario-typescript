@@ -1,6 +1,7 @@
 import { Level } from '../Level'
 import { Font } from '../loaders/font'
 import { findPlayers } from '../player'
+import { raise } from '../raise'
 import { Player } from '../traits/Player'
 
 function getPlayer(level: Level) {
@@ -17,7 +18,8 @@ export function createPlayerProgressLayer(font: Font, level: Level) {
   spriteBuffer.width = 32
   spriteBuffer.height = 32
 
-  const spriteBufferContext = spriteBuffer.getContext('2d')!
+  const spriteBufferContext =
+    spriteBuffer.getContext('2d') || raise('Canvas not supported')
 
   return function drawPlayerProgress(context: CanvasRenderingContext2D) {
     const entity = getPlayer(level)

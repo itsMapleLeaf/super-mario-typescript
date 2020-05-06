@@ -9,7 +9,7 @@ function createEntityLayer(entities: Set<Entity>) {
     camera: Camera,
   ) {
     context.strokeStyle = 'red'
-    entities.forEach(entity => {
+    entities.forEach((entity) => {
       context.strokeRect(
         entity.bounds.left - camera.pos.x,
         entity.bounds.top - camera.pos.y,
@@ -24,6 +24,7 @@ function createTileCandidateLayer(tileResolver: TileResolver) {
   const tileSize = tileResolver.tileSize
   const resolvedTiles = [] as Array<{ x: number; y: number }>
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const getByIndexOriginal = tileResolver.getByIndex
 
   tileResolver.getByIndex = function getByIndexFake(x: number, y: number) {

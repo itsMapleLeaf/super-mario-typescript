@@ -1,5 +1,6 @@
 import { Camera } from '../Camera'
 import { Level } from '../Level'
+import { raise } from '../raise'
 import { SpriteSheet } from '../SpriteSheet'
 import { TileResolver, TileResolverMatrix } from '../TileResolver'
 
@@ -14,7 +15,7 @@ export function createBackgroundLayer(
   buffer.width = 256 + 16
   buffer.height = 240
 
-  const context = buffer.getContext('2d')!
+  const context = buffer.getContext('2d') || raise('Canvas not supported')
 
   function drawTiles(startIndex: number, endIndex: number) {
     context.clearRect(0, 0, buffer.width, buffer.height)
